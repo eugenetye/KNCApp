@@ -1,12 +1,12 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Main = () => {
+const Trails = () => {
   return (
     <View>
-      <Text>Main</Text>
+      <Text>Trails</Text>
     </View>
   )
 }
 
-export default Main
+export default Trails
