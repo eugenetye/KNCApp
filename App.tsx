@@ -8,7 +8,15 @@ const Stack = createNativeStackNavigator();
 export default function App() {
   return (
     <NavigationContainer>
-      <Footer/>
+      <Stack.Navigator 
+        screenOptions={{
+          headerStyle: {
+            backgroundColor: 'green',
+          },
+          headerTintColor: 'black',
+          }}>
+        <Stack.Screen name="Kalamazoo Nature Center" component={Footer} />
+      </Stack.Navigator>
     </NavigationContainer>
   );
 }
