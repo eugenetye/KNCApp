@@ -1,12 +1,10 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Discover = () => {
+export const Discover = () => {
   return (
     <View>
-      <Text>Discover</Text>
+      <Text className='text-4xl p-4'>Discover</Text>
     </View>
   )
 }
-
-export default Discover

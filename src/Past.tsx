@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Past = () => {
+export const Past = () => {
   return (
     <View>
       <Text>Past</Text>
@@ -9,4 +9,3 @@ const Past = () => {
   )
 }
 
-export default Past

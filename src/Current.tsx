@@ -1,7 +1,7 @@
 import { View, Text } from 'react-native'
 import React from 'react'
 
-const Current = () => {
+export const Current = () => {
   return (
     <View>
       <Text>Current</Text>
@@ -9,4 +9,3 @@ const Current = () => {
   )
 }
 
-export default Current
