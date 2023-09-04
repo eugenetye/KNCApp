@@ -4,7 +4,7 @@ import React from 'react'
 export const Past = () => {
   return (
     <View>
-      <Text>Past</Text>
+      <Text className='text-4xl p-4'>Past</Text>
     </View>
   )
 }

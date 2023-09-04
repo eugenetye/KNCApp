@@ -4,7 +4,7 @@ import React from 'react'
 export const Current = () => {
   return (
     <View>
-      <Text>Current</Text>
+      <Text className='text-4xl p-4'>Current</Text>
     </View>
   )
 }

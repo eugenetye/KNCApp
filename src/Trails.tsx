@@ -4,7 +4,7 @@ import React from 'react'
 export const Trails = () => {
   return (
     <View>
-      <Text>Trails</Text>
+      <Text className='text-4xl p-4'>Trails</Text>
     </View>
   )
 }
