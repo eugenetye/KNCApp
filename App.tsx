@@ -2,8 +2,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { NavigationContainer } from '@react-navigation/native';
 import {Main} from './src/Main';
 import React from 'react';
-import { Image, View } from 'react-native';
-
+import { Image } from 'react-native';
 
 const Stack = createNativeStackNavigator();
 

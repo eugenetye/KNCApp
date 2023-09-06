@@ -2,8 +2,8 @@ import { View, Text } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from 'react'
-import {Discover} from './Discover'
 import {Trails} from './Trails'
+import {Discover} from './Discover'
 import {Current} from './Current';
 import {Past} from './Past';
 
@@ -20,6 +20,7 @@ function showScreens(pageName : string, pageComponent : any) {
     />
   );
 }
+
 
 const discoverScreen = showScreens("Discover", Discover);
 const trailsScreen = showScreens("Trails", Trails);
@@ -40,7 +41,7 @@ export const Main = () => {
 
           } else if (route.name === "Current") {
             iconName = "newspaper-outline" as const;
-            
+
           } else if (route.name === "Past") {
             iconName = "calendar-outline" as const;
           }
