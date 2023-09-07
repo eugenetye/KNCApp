@@ -1,9 +1,9 @@
-import { View, Text } from 'react-native'
+import { View, Text, ScrollView } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { useFonts } from 'expo-font';
 import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
 import { collection, onSnapshot } from 'firebase/firestore';
-
+import { IndividualItem } from '../components/IndividualItem';
 
 export const Trails = () => {
   const [fontsLoaded] = useFonts({
@@ -11,7 +11,7 @@ export const Trails = () => {
   });
 
 
-  const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty string
+  const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
 
 
   useEffect(() => {
@@ -40,18 +40,25 @@ export const Trails = () => {
     
   
   return (
+    <ScrollView>
     <View>
       <View>
         <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Trails</Text>
       </View>
-      <View>
+      {/* <View>
         { datas.map(data => (
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 20, padding:15 }}> {data.description} {data.difficulty} {data.length}</Text>
+          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 20, padding:20 }}> {data.description} {data.difficulty} {data.length}</Text>
         )
         )}
-      </View>
+        </View> */}
+
+
+      {datas.map((data) => (
+          <IndividualItem item={data} /> 
+        ))}
 
     </View>
+    </ScrollView>
   )
 }
 
