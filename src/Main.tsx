@@ -6,6 +6,7 @@ import {Trails} from './Trails'
 import {Discover} from './Discover'
 import {Current} from './Current';
 import {Past} from './Past';
+import {QRcode} from './QRcode';
 
 const Tab = createBottomTabNavigator();
 
@@ -26,6 +27,7 @@ const discoverScreen = showScreens("Discover", Discover);
 const trailsScreen = showScreens("Trails", Trails);
 const currentScreen = showScreens("Current", Current);
 const pastScreen = showScreens("Past", Past);
+const qrcodeScreen = showScreens("QRcode", QRcode);
 
 export const Main = () => {
   return (
@@ -35,15 +37,14 @@ export const Main = () => {
           let iconName;
           if (route.name === "Discover") {
             iconName = "navigate-circle-outline" as const;
-
           } else if (route.name === "Trails") {
             iconName = "map-outline" as const;
-
           } else if (route.name === "Current") {
             iconName = "newspaper-outline" as const;
-
           } else if (route.name === "Past") {
             iconName = "calendar-outline" as const;
+          } else if (route.name === "QRcode") {
+            iconName = "qr-code-outline" as const;
           }
           return (
             <Ionicons
@@ -59,6 +60,7 @@ export const Main = () => {
     >
       {discoverScreen}
       {trailsScreen}
+      {qrcodeScreen}
       {currentScreen}
       {pastScreen}
 
