@@ -3,16 +3,23 @@ import React from 'react'
 import { useFonts } from 'expo-font';
 import { BarCodeScanner } from 'expo-barcode-scanner';
 
-export default class QRScanner extends React.Component {
-    state = {
-      hasCameraPermission: null,
-      lastScannedUrl: '',
+type QRProps = {
+  navigation: any
+};
+type QRState = {
+  hasCameraPermission: Boolean,
+  last_scanned_page: string,
+};
+export default class QRScanner extends React.Component<QRProps, QRState> {
+    state: QRState = {
+      hasCameraPermission: false,
+      last_scanned_page: '',
     };
-  
+
     componentDidMount() {
       this._requestCameraPermission();
     }
-  
+
     _requestCameraPermission = async () => {
       const { status } = await BarCodeScanner.requestPermissionsAsync();
       this.setState({
@@ -21,10 +28,16 @@ export default class QRScanner extends React.Component {
     };
   
     _handleBarCodeRead = (result: any) => {
-      // console.log(result);
-      if (result.data !== this.state.lastScannedUrl) {
-        this.setState({ lastScannedUrl: result.data });
-      }
+      const new_page = result.data;
+
+      console.log(result);
+
+      this.setState({ last_scanned_page:
+        ((new_page != this.state.last_scanned_page)
+          ? new_page
+          : this.state.last_scanned_page + '1')
+      });
+      this.props.navigation.navigate(new_page);
     };
   
     render() {
@@ -56,16 +69,9 @@ export default class QRScanner extends React.Component {
     }
 }
 
-export const QRcode = () => {
-  const [fontsLoaded] = useFonts({
-    'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
-  });
-  if (!fontsLoaded) {
-    return null;
-  }
-
+export const QRcode = (props: any) => {
   return (
-      <QRScanner />
+      <QRScanner {...props} />
   )
 }
 

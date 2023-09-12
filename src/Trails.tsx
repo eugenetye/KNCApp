@@ -19,10 +19,9 @@ export const Trails = () => {
 
     const subscriber = onSnapshot(querySnapshot, {
       next: (snapshot) => {
-        
         const datas: any[] = [];
         snapshot.docs.forEach((doc) => {
-          console.log(doc.data());
+          // console.log(doc.data());
           datas.push({
             id: doc.id,
             ...doc.data(),
@@ -32,7 +31,7 @@ export const Trails = () => {
       },
     });
 
-    console.log(datas)
+    // console.log(datas)
 
     return () => subscriber();
   }, []);
@@ -53,9 +52,9 @@ export const Trails = () => {
         </View> */}
 
 
-      {datas.map((data) => (
-          <IndividualItem item={data} /> 
-        ))}
+      {datas.map((data, i) => (
+          <IndividualItem key={i} item={data} /> 
+      ))}
 
     </View>
     </ScrollView>
