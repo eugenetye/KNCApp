@@ -10,11 +10,14 @@ import {QRcode} from './QRcode';
 
 const Tab = createBottomTabNavigator();
 
-function showScreens(pageName : string, pageComponent : any) {
+function showScreens(
+  pageName: string,
+  comp: () => React.JSX.Element | null
+) {
   return (
-    <Tab.Screen 
-      name = {pageName}
-      component= {pageComponent}
+    <Tab.Screen
+      name={pageName}
+      component={comp}
       options={{
         headerShown: false,
       }}
@@ -27,25 +30,22 @@ const discoverScreen = showScreens("Discover", Discover);
 const trailsScreen = showScreens("Trails", Trails);
 const currentScreen = showScreens("Current", Current);
 const pastScreen = showScreens("Past", Past);
-const qrcodeScreen = showScreens("QRcode", QRcode);
+
+const ICONS: Record<string, string> = {
+  "Discover": "navigate-circle-outline",
+  "Trails": "map-outline",
+  "Current": "newspaper-outline" ,
+  "Past": "calendar-outline",
+  "QRcode": "qr-code-outline",
+};
 
 export const Main = () => {
   return (
     <Tab.Navigator
-      screenOptions={({ route }) => ({
+      screenOptions={({ route, navigation }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          let iconName;
-          if (route.name === "Discover") {
-            iconName = "navigate-circle-outline" as const;
-          } else if (route.name === "Trails") {
-            iconName = "map-outline" as const;
-          } else if (route.name === "Current") {
-            iconName = "newspaper-outline" as const;
-          } else if (route.name === "Past") {
-            iconName = "calendar-outline" as const;
-          } else if (route.name === "QRcode") {
-            iconName = "qr-code-outline" as const;
-          }
+          ICONS
+          const iconName: string = ICONS[route.name];
           return (
             <Ionicons
               name={iconName}
@@ -60,10 +60,18 @@ export const Main = () => {
     >
       {discoverScreen}
       {trailsScreen}
-      {qrcodeScreen}
+      <Tab.Screen
+        name={"QRcode"}
+        options={{
+          headerShown: false,
+        }}
+      >
+        {({ route, navigation }) =>
+          <QRcode navigation={navigation}/>
+        }
+      </Tab.Screen>
       {currentScreen}
       {pastScreen}
-
     </Tab.Navigator>
   );
 };
