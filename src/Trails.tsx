@@ -44,8 +44,8 @@ export const Trails = () => {
           <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Trails</Text>
         </View>
 
-        {datas.map((data) => (
-            <IndividualItem item={data}/> 
+        {datas.map((data, i) => (
+            <IndividualItem key={i} item={data}/> 
           ))}
 
       </View>

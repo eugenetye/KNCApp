@@ -1,5 +1,5 @@
-import {Text, View, Pressable, Image } from "react-native";
-import React, {useState, useEffect} from "react";
+import { Text, View, Pressable, Image } from "react-native";
+import React, { useState, useEffect } from "react";
 import { FIREBASE_STORAGE } from "../firebaseConfig";
 import { ref, getDownloadURL } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
@@ -10,28 +10,28 @@ export type RootStackParamList = {
   Trail_Info: { param: any } | undefined;
 };
 
-export const IndividualItem = ({ item } : any) => {
+export const IndividualItem = ({ item }: any) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const imgLink = '/' + item.uid + '.jpeg';
 
-  const [url, setUrl] = useState('');
+  const [url, setUrl] = useState(imgLink);
 
   useEffect(() => {
     const func = async () => {
-      const reference = ref(FIREBASE_STORAGE, imgLink); 
+      const reference = ref(FIREBASE_STORAGE, imgLink);
       await getDownloadURL(reference).then((x) => {
         setUrl(x);
-    })
-  }
+      })
+    }
 
     func();
   }, []);
 
   return (
     <View>
-      <Pressable onPress={() => navigation.navigate('Trail_Info', {param: item})}
-      
+      <Pressable onPress={() => navigation.navigate('Trail_Info', { param: item })}
+
         style={{
           backgroundColor: "#F8F8F8",
           borderRadius: 8,
@@ -42,12 +42,12 @@ export const IndividualItem = ({ item } : any) => {
           margin: 14,
         }}
       >
-         <View style={{paddingVertical: 12}}>
+        <View style={{ paddingVertical: 12 }}>
           <Image
-            style={{width: 340, height: 150, borderRadius: 8}}
+            style={{ width: 340, height: 150, borderRadius: 8 }}
             source={{ uri: url }}
           />
-        </View> 
+        </View>
 
         <View>
           <Text
@@ -63,6 +63,6 @@ export const IndividualItem = ({ item } : any) => {
         </View>
       </Pressable>
     </View>
-    );
+  );
 };
 
