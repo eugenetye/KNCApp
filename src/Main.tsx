@@ -40,43 +40,11 @@ const ICONS: Record<string, string> = {
   "QRcode": "qr-code-outline",
 };
 
-type TabScreenRouteProp = RouteProp<ParamListBase, keyof ParamListBase>;
-
-export const tabBarOptions = {
-  screenOptions: ({ route, focused }: { route: TabScreenRouteProp, focused: boolean }) => ({
-    tabBarIcon: ({}) => {
-      let iconName;
-      if (route.name === "Discover") {
-        iconName = "navigate-circle-outline" as const;
-      } else if (route.name === "Trails") {
-        iconName = "map-outline" as const;
-      } else if (route.name === "Current") {
-        iconName = "newspaper-outline" as const;
-      } else if (route.name === "Past") {
-        iconName = "calendar-outline" as const;
-      } else if (route.name === "QRcode") {
-        iconName = "qr-code-outline" as const;
-      }
-      return (
-        <Ionicons
-          name={iconName}
-          size={25}
-          color={focused ? "#C5DFC5" : "grey"}
-        />
-      );
-    },
-    tabBarActiveTintColor: "green",
-    tabBarInactiveTintColor: "gray",
-  }),
-};
-
-
 export const Main = () => {
   return (
     <Tab.Navigator
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          ICONS
           const iconName: string = ICONS[route.name];
           return (
             <Ionicons

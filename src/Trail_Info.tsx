@@ -6,7 +6,6 @@ import { ref, getDownloadURL } from "firebase/storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import { tabBarOptions } from './Main';
 
 export type RootStackParamList = {
     Trails: { param?: any } | undefined;
@@ -78,7 +77,7 @@ const Trail_Info = ({route} : any) => {
         </View>
     </View>
 
-    
+
     </ScrollView>
     </SafeAreaView>
     )
