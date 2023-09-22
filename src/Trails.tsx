@@ -21,7 +21,6 @@ export const Trails = () => {
       next: (snapshot) => {
         const datas: any[] = [];
         snapshot.docs.forEach((doc) => {
-          // console.log(doc.data());
           datas.push({
             id: doc.id,
             ...doc.data(),
@@ -40,23 +39,16 @@ export const Trails = () => {
   
   return (
     <ScrollView>
-    <View>
       <View>
-        <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Trails</Text>
+        <View>
+          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Trails</Text>
+        </View>
+
+        {datas.map((data) => (
+            <IndividualItem item={data}/> 
+          ))}
+
       </View>
-      {/* <View>
-        { datas.map(data => (
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 20, padding:20 }}> {data.description} {data.difficulty} {data.length}</Text>
-        )
-        )}
-        </View> */}
-
-
-      {datas.map((data, i) => (
-          <IndividualItem key={i} item={data} /> 
-      ))}
-
-    </View>
     </ScrollView>
   )
 }
