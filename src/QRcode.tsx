@@ -10,6 +10,8 @@ type QRState = {
   hasCameraPermission: Boolean,
   last_scanned_page: string,
 };
+
+
 export default class QRScanner extends React.Component<QRProps, QRState> {
     state: QRState = {
       hasCameraPermission: false,
@@ -28,16 +30,11 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
     };
   
     _handleBarCodeRead = (result: any) => {
-      const new_page = result.data;
+      const new_param = JSON.parse(result.data);
 
       console.log(result);
 
-      this.setState({ last_scanned_page:
-        ((new_page != this.state.last_scanned_page)
-          ? new_page
-          : this.state.last_scanned_page + '1')
-      });
-      this.props.navigation.navigate(new_page);
+      this.props.navigation.navigate('Trail_Info', { param: new_param });
     };
   
     render() {
