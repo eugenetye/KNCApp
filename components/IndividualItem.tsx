@@ -2,8 +2,16 @@ import {Text, View, Pressable, Image } from "react-native";
 import React, {useState, useEffect} from "react";
 import { FIREBASE_STORAGE } from "../firebaseConfig";
 import { ref, getDownloadURL } from "firebase/storage";
+import { useNavigation } from "@react-navigation/native";
+import { StackNavigationProp } from '@react-navigation/stack';
+
+
+export type RootStackParamList = {
+  Trail_Info: { param: any } | undefined;
+};
 
 export const IndividualItem = ({ item } : any) => {
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   const imgLink = '/' + item.uid + '.jpeg';
 
@@ -22,7 +30,8 @@ export const IndividualItem = ({ item } : any) => {
 
   return (
     <View>
-      <Pressable
+      <Pressable onPress={() => navigation.navigate('Trail_Info', {param: item})}
+      
         style={{
           backgroundColor: "#F8F8F8",
           borderRadius: 8,
