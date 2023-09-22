@@ -18,7 +18,7 @@ const Trail_Info = ({route} : any) => {
     const item = route.params.param
     const imgLink = '/' + item.uid + '.jpeg';
 
-    const [url, setUrl] = useState('');
+    const [url, setUrl] = useState(imgLink);
 
     useEffect(() => {
         const func = async () => {
