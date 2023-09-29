@@ -7,7 +7,8 @@ import { StackNavigationProp } from '@react-navigation/stack';
 
 export type RootStackParamList = {
   Info_Template: { param: any } | undefined;
-};
+=======
+
 
 export const IndividualItem = ({ item }: any) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();

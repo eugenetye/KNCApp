@@ -3,6 +3,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import {Main} from './src/Main';
 import React from 'react';
 import { Image } from 'react-native';
+
 import Info_Template from './src/Info_Template';
 
 const Stack = createNativeStackNavigator();
@@ -28,8 +29,10 @@ export default function App() {
           }}>
         <Stack.Screen name="Kalamazoo Nature Center" component={Main} options={{headerTitle: () => <LogoTitle /> }}/>
         <Stack.Screen
+
           name="Info_Template"
           component={Info_Template}
+
           options={{
           headerShown: false,
         }}

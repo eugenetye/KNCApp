@@ -7,6 +7,8 @@ import {Discover} from './Discover'
 import {Current} from './Current';
 import {Past} from './Past';
 import {QRcode} from './QRcode';
+import { RouteProp } from '@react-navigation/native'; // Import RouteProp
+import { ParamListBase } from '@react-navigation/native'; // Import ParamListBase
 
 const Tab = createBottomTabNavigator();
 
