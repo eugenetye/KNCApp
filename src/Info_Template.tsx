@@ -11,7 +11,7 @@ export type RootStackParamList = {
     Trails: { param?: any } | undefined;
   };
 
-const Trail_Info = ({route} : any) => {
+const Info_Template = ({route} : any) => {
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
@@ -86,4 +86,4 @@ const Trail_Info = ({route} : any) => {
 }
 
 
-export default Trail_Info
+export default Info_Template
