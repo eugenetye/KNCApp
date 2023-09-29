@@ -5,7 +5,6 @@ import { ref, getDownloadURL } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 
-
 export type RootStackParamList = {
   Trail_Info: { param: any } | undefined;
 };
