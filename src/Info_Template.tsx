@@ -2,23 +2,23 @@ import { ScrollView, Text, View, Pressable, Image } from 'react-native'
 import React, { useEffect, useLayoutEffect, useState } from 'react'
 import { useNavigation } from '@react-navigation/native';
 import { FIREBASE_STORAGE } from "../firebaseConfig";
-import { ref, getDownloadURL } from "firebase/storage";
+import { ref, getDownloadURL, listAll } from "firebase/storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 
 export type RootStackParamList = {
-    Past: { param?: any } | undefined;
+    Trails: { param?: any } | undefined;
   };
 
-const Past_Info = ({route} : any) => {
+const Trail_Info = ({route} : any) => {
 
     const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
     const item = route.params.param
     const imgLink = '/' + item.uid + '.jpeg';
 
-    const [url, setUrl] = useState('');
+    const [url, setUrl] = useState(imgLink);
 
     useEffect(() => {
         const func = async () => {
@@ -30,6 +30,8 @@ const Past_Info = ({route} : any) => {
 
         func();
     }, []);
+
+    
     
     useLayoutEffect(() => {
         navigation.setOptions({
@@ -84,4 +86,4 @@ const Past_Info = ({route} : any) => {
 }
 
 
-export default Past_Info
+export default Trail_Info
