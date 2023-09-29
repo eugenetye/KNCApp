@@ -44,8 +44,8 @@ export const Past = () => {
           <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Past</Text>
         </View>
 
-        {datas.map((data) => (
-            <IndividualItem item={data}/> 
+        {datas.map((data, i) => (
+            <IndividualItem key={i} item={data}/> 
           ))}
 
       </View>
