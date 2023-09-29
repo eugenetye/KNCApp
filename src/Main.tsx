@@ -48,7 +48,7 @@ export const Main = () => {
           const iconName: string = ICONS[route.name];
           return (
             <Ionicons
-              name={iconName}
+              name = {iconName}
               size={25}
               color={focused ? "#C5DFC5" : "grey"}
             />

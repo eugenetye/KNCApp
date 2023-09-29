@@ -5,10 +5,10 @@ import { ref, getDownloadURL } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 
-
 export type RootStackParamList = {
-  Trail_Info: { param: any } | undefined;
-};
+  Info_Template: { param: any } | undefined;
+=======
+
 
 export const IndividualItem = ({ item }: any) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
@@ -30,7 +30,7 @@ export const IndividualItem = ({ item }: any) => {
 
   return (
     <View>
-      <Pressable onPress={() => navigation.navigate('Trail_Info', { param: item })}
+      <Pressable onPress={() => navigation.navigate('Info_Template', { param: item })}
 
         style={{
           backgroundColor: "#F8F8F8",
