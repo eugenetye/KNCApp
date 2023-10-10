@@ -21,7 +21,6 @@ const _onPlaybackUpdate = (status: AVPlaybackStatus, setdur: any, setprog: any, 
 }
 
 const Controls = ({ playing, onPlay, onPause }: { playing: Boolean, onPlay: any, onPause: any }) => {
-  const [isPlaying, setIsPlaying] = useState(playing);
   return (
     <View>
       <View style={{ display: 'flex', flexDirection: 'row' }}>
@@ -29,14 +28,14 @@ const Controls = ({ playing, onPlay, onPause }: { playing: Boolean, onPlay: any,
           <Ionicons
             name='play-circle'
             size={25}
-            color={isPlaying ? "#C5DFC5" : "grey"}
+            color={playing ? "#C5DFC5" : "grey"}
           />
         </Pressable>
         <Pressable onPress={onPause}>
           <Ionicons
             name='pause-circle'
             size={25}
-            color={(!isPlaying) ? "#C5DFC5" : "grey"}
+            color={(!playing) ? "#C5DFC5" : "grey"}
           />
         </Pressable>
       </View>
@@ -48,6 +47,7 @@ const AudioPlayer = ({ file }: { file: string }) => {
   const [progress, setprog] = useState(0);
   const [duration, setdur] = useState(0);
   const [isPlaying, setplay] = useState(false);
+  const [isStarted, setstart] = useState(false);
 
   const playbackObject = new Audio.Sound();
   playbackObject.setOnPlaybackStatusUpdate(
@@ -61,19 +61,34 @@ const AudioPlayer = ({ file }: { file: string }) => {
       try {
         await playbackObject.loadAsync({ uri: file });
         await playbackObject.playAsync();
+        setstart(true);
       } catch (e) {
         console.log(`DUMB ERROR ${e}`);
       }
     })();
-  }, []);
+  }, [file]);
+
+  useEffect(() => {
+    (async () => {
+        try {
+          if (isStarted && !isPlaying) {
+            await playbackObject.pauseAsync();
+          } else if (isStarted && isPlaying) {
+            await playbackObject.playAsync();
+          }
+        } catch (e) {
+          console.log(`DUMB ERROR ${e}`);
+        }
+    })();
+  }, [isPlaying, isStarted]);
 
   return (
     <View>
       <View>
         <Controls
-          playing={progress <= duration || isPlaying}
-          onPlay={() => setplay(true)}
-          onPause={() => setplay(false)}
+          playing={isPlaying}
+          onPlay={() => { setplay(true); }}
+          onPause={() => { setplay(false); }}
         />
         <ProgressBar progress={progress} />
       </View>

@@ -13,7 +13,7 @@ type QRProps = {
 };
 type QRState = {
   hasCameraPermission: Boolean,
-  last_scanned_page: string,
+  audioFile: string,
   isPlaying: Boolean,
   progress: number,
   duration: number,
@@ -33,10 +33,14 @@ async function saveDirExists(): Promise<Boolean> {
   return (await FileSys.getInfoAsync(SAVE_DIR)).exists;
 }
 
+async function saveFileExists(file: string): Promise<Boolean> {
+  return (await FileSys.getInfoAsync(SAVE_DIR + file + '.mp3')).exists;
+}
+
 export default class QRScanner extends React.Component<QRProps, QRState> {
   state: QRState = {
     hasCameraPermission: false,
-    last_scanned_page: '',
+    audioFile: '',
     isPlaying: false,
     progress: 0,
     duration: 0,
@@ -45,26 +49,7 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
 
   componentDidMount() {
     this._requestCameraPermission();
-    this._handleBarCodeRead({data: '{}'})
   }
-
-  _onPlaybackUpdate = (status: AVPlaybackStatus) => {
-    console.log(status);
-
-    if (status.isLoaded) {
-      const dur = status.durationMillis
-        ? status.durationMillis
-        : 0;
-
-      this.setState({
-        isPlaying: status.isPlaying,
-        progress: status.positionMillis,
-        duration: dur
-      });
-    } else {
-      // There was an error...
-    }
-  };
 
   _requestCameraPermission = async () => {
     const { status } = await BarCodeScanner.requestPermissionsAsync();
@@ -74,25 +59,33 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
   };
 
   _handleBarCodeRead = async (result: any) => {
-    // if (this.state.isPlaying) return;
-
     const new_param = JSON.parse(result.data);
 
-    try {
-      if (!(await saveDirExists())) {
-        await ensureDirExists();
-        const reference = ref(FIREBASE_STORAGE, '/ff-16b-2c-44100hz.mp3');
-        const url = await getDownloadURL(reference);
-        await FileSys.downloadAsync(url, SAVE_DIR + 'audio.mp3');
+    // We only cache audio so far
+    //
+    // TODO: this will actually need to be a loop, the
+    // first QR code we scan at the KNC building will start
+    // downloading all the audio files and pictures if there are
+    // any.
+    if (new_param['audio']) {
+      try {
+        if (!(await saveDirExists())) {
+          await ensureDirExists();
+        }
+        for (const file of new_param['files']) {
+          if (!saveFileExists(file)) {
+            const reference = ref(FIREBASE_STORAGE, file);
+            const url = await getDownloadURL(reference);
+            await FileSys.downloadAsync(url, SAVE_DIR + file + '.mp3');
+          }
+        }
+      } catch (e) {
+        console.log(`We got an error: ${e}`);
       }
-    } catch (e) {
-      console.log(`We got an error: ${e}`);
     }
 
-    console.log('Make audio crap');
-    this.setState({ isPlaying: true });
-
-    // this.props.navigation.navigate('Trail_Info', { param: new_param });
+    // This happens for both audio and picture pages
+    this.props.navigation.navigate('Info_Template', { param: new_param });
   };
 
   render() {
@@ -119,7 +112,7 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
             />
           </View>)}
         {(this.state.isPlaying
-          ? <AudioPlayer file={SAVE_DIR + 'audio.mp3'} />
+          ? <AudioPlayer file={SAVE_DIR + this.state.audioFile} />
           : <Text disabled={true} />)}
       </View>
     );
