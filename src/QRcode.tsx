@@ -22,11 +22,7 @@ type QRState = {
 const SAVE_DIR = FileSys.cacheDirectory + 'kncapp/';
 
 async function ensureDirExists() {
-  const dirInfo = await FileSys.getInfoAsync(SAVE_DIR);
-  if (!dirInfo.exists) {
-    console.log("KNC directory doesn't exist, creating…");
-    await FileSys.makeDirectoryAsync(SAVE_DIR, { intermediates: true });
-  }
+  await FileSys.makeDirectoryAsync(SAVE_DIR, { intermediates: true });
 }
 
 async function saveDirExists(): Promise<Boolean> {
@@ -34,7 +30,7 @@ async function saveDirExists(): Promise<Boolean> {
 }
 
 async function saveFileExists(file: string): Promise<Boolean> {
-  return (await FileSys.getInfoAsync(SAVE_DIR + file + '.mp3')).exists;
+  return (await FileSys.getInfoAsync(file)).exists;
 }
 
 export default class QRScanner extends React.Component<QRProps, QRState> {
@@ -59,7 +55,7 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
   };
 
   _handleBarCodeRead = async (result: any) => {
-    const new_param = JSON.parse(result.data);
+    var new_param = JSON.parse(result.data);
 
     // We only cache audio so far
     //
@@ -67,17 +63,19 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
     // first QR code we scan at the KNC building will start
     // downloading all the audio files and pictures if there are
     // any.
-    if (new_param['audio']) {
+    if (new_param.audio) {
       try {
         if (!(await saveDirExists())) {
           await ensureDirExists();
         }
-        for (const file of new_param['files']) {
-          if (!saveFileExists(file)) {
-            const reference = ref(FIREBASE_STORAGE, file);
+        for (let i = 0; i < new_param.files.length; i++) {
+          const file = new_param.files[i];
+          if (!(await saveFileExists(SAVE_DIR + file + '.mp3'))) {
+            const reference = ref(FIREBASE_STORAGE, file + '.mp3');
             const url = await getDownloadURL(reference);
             await FileSys.downloadAsync(url, SAVE_DIR + file + '.mp3');
           }
+          new_param.files[i] = SAVE_DIR + file + '.mp3';
         }
       } catch (e) {
         console.log(`We got an error: ${e}`);
@@ -111,9 +109,6 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
               }}
             />
           </View>)}
-        {(this.state.isPlaying
-          ? <AudioPlayer file={SAVE_DIR + this.state.audioFile} />
-          : <Text disabled={true} />)}
       </View>
     );
   }

@@ -63,7 +63,7 @@ const AudioPlayer = ({ file }: { file: string }) => {
         await playbackObject.playAsync();
         setstart(true);
       } catch (e) {
-        console.log(`DUMB ERROR ${e}`);
+        console.log(`LOAD: ${e}`);
       }
     })();
   }, [file]);
@@ -77,7 +77,7 @@ const AudioPlayer = ({ file }: { file: string }) => {
             await playbackObject.playAsync();
           }
         } catch (e) {
-          console.log(`DUMB ERROR ${e}`);
+          console.log(`PLAY/PAUSE: ${e}`);
         }
     })();
   }, [isPlaying, isStarted]);
