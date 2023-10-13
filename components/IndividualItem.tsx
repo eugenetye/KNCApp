@@ -9,10 +9,20 @@ export type RootStackParamList = {
   Info_Template: { param: any } | undefined;
 }
 
+const setImageLink = (uid: string, type: string) => {
+  let pages: string[] = ['discover', 'current', 'past', 'trails']; 
+
+  for (let i = 0; i < pages.length; i++) {
+    if (type == pages[i]) {
+      return ('/' + pages[i] + '/' + uid + '.jpeg');
+    }
+  }
+}
+
 export const IndividualItem = ({ item }: any) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
-  const imgLink = '/' + item.uid + '.jpeg';
+  const imgLink = setImageLink(item.uid, item.type);
 
   const [url, setUrl] = useState(imgLink);
 
@@ -26,6 +36,8 @@ export const IndividualItem = ({ item }: any) => {
 
     func();
   }, []);
+
+
 
   return (
     <View>
@@ -51,10 +63,10 @@ export const IndividualItem = ({ item }: any) => {
         <View>
           <Text
             style={{
-              fontSize: 19,
+              fontSize: 22,
               fontWeight: "500",
               paddingVertical: 8,
-
+              fontFamily: 'Questrial-Regular',
             }}
           >
             {item.name}
