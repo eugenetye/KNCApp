@@ -73,10 +73,12 @@ const AudioPlay = ({ file }: { file: string}) => {
   )
 }
 
-const TextAndPicture = ({ route }: any) => {
+const TextAndPicture = (route : any) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const item = route.params.param
+  console.log(item)
+
   const imgLink = setImageLink(item.uid, item.type);
 
   const [url, setUrl] = useState(imgLink);
@@ -162,10 +164,10 @@ const TextAndPicture = ({ route }: any) => {
 
 const Info_Template = ({ route }: any) => {
   const item = route.params.param;
+  console.log(route)
 
-  const file_name: string = item.files[0];
   return (item.audio
-    ? <AudioPlay file={file_name} />
+    ? <AudioPlay file={item.files[0]} />
     : <TextAndPicture {... route}/>)
 }
 
