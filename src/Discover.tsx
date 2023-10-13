@@ -24,7 +24,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     backgroundColor: '#046339',
-    borderRadius: 30  ,
+    borderRadius: 15  ,
     padding: 10,
     height: 50,
     width: "80%",
@@ -77,7 +77,6 @@ export const Discover = () => {
           <Text style={styles.headertext}>Discover</Text>
         </View>
         <View style={styles.image}> 
-        {/* {discoverItem && <Image style={{ width: 340, height: 160, borderRadius: 8 }} source={{ uri: discoverItem.imageURL }} />}*/}
           {datas.map((data, i) => (
               <IndividualItem key={i} item={data}/>
             ))}

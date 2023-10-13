@@ -45,7 +45,7 @@ export const Main = () => {
     <Tab.Navigator
       screenOptions={({ route, navigation }) => ({
         tabBarIcon: ({ focused, color, size }) => {
-          const iconName: string = ICONS[route.name];
+          const iconName: any = ICONS[route.name];
           return (
             <Ionicons
               name = {iconName}
