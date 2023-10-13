@@ -46,9 +46,6 @@ export const Discover = () => {
   const [fontsLoaded] = useFonts({
     'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
   });
-  if (!fontsLoaded) {
-    return null;
-  }
 
   const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
 
@@ -81,9 +78,8 @@ export const Discover = () => {
         </View>
         <View style={styles.image}> 
         {/* {discoverItem && <Image style={{ width: 340, height: 160, borderRadius: 8 }} source={{ uri: discoverItem.imageURL }} />}*/}
-          {datas.map((data) => (
-              // <DiscoverImage item={data}/> 
-              <IndividualItem item={data}/>
+          {datas.map((data, i) => (
+              <IndividualItem key={i} item={data}/>
             ))}
         </View>
         <View style={{alignItems: 'center'}}>
