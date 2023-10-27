@@ -4,17 +4,15 @@ import React, { useState, useEffect } from 'react';
 import { ProgressBar } from 'react-native-paper';
 import { AVPlaybackStatus, Audio } from 'expo-av';
 
-const _onPlaybackUpdate = (status: AVPlaybackStatus, setdur: any, setprog: any, setplay: any) => {
+const _onPlaybackUpdate = (status: AVPlaybackStatus, setprog: any) => {
   console.log(status);
 
   if (status.isLoaded) {
-    const dur = status.durationMillis
-      ? status.durationMillis
+    const prog = status.durationMillis
+      ? status.positionMillis / status.durationMillis
       : 0;
 
-    setplay(status.isPlaying);
-    setprog(status.positionMillis);
-    setdur(dur);
+    setprog(prog);
   } else {
     // There was an error...
   }
@@ -27,14 +25,14 @@ const Controls = ({ playing, onPlay, onPause }: { playing: Boolean, onPlay: any,
         <Pressable onPress={onPlay}>
           <Ionicons
             name='play-circle'
-            size={25}
+            size={50}
             color={playing ? "#C5DFC5" : "grey"}
           />
         </Pressable>
         <Pressable onPress={onPause}>
           <Ionicons
             name='pause-circle'
-            size={25}
+            size={50}
             color={(!playing) ? "#C5DFC5" : "grey"}
           />
         </Pressable>
@@ -43,57 +41,90 @@ const Controls = ({ playing, onPlay, onPause }: { playing: Boolean, onPlay: any,
   );
 };
 
-const AudioPlayer = ({ file }: { file: string }) => {
-  const [progress, setprog] = useState(0);
-  const [duration, setdur] = useState(0);
-  const [isPlaying, setplay] = useState(false);
-  const [isStarted, setstart] = useState(false);
-
-  const playbackObject = new Audio.Sound();
-  playbackObject.setOnPlaybackStatusUpdate(
-    (s: AVPlaybackStatus) => {
-      _onPlaybackUpdate(s, setdur, setprog, setplay);
-    }
-  );
-
-  useEffect(() => {
-    (async () => {
-      try {
-        await playbackObject.loadAsync({ uri: file });
-        await playbackObject.playAsync();
-        setstart(true);
-      } catch (e) {
-        console.log(`LOAD: ${e}`);
-      }
-    })();
-  }, [file]);
-
-  useEffect(() => {
-    (async () => {
-        try {
-          if (isStarted && !isPlaying) {
-            await playbackObject.pauseAsync();
-          } else if (isStarted && isPlaying) {
-            await playbackObject.playAsync();
-          }
-        } catch (e) {
-          console.log(`PLAY/PAUSE: ${e}`);
-        }
-    })();
-  }, [isPlaying, isStarted]);
-
-  return (
-    <View>
-      <View>
-        <Controls
-          playing={isPlaying}
-          onPlay={() => { setplay(true); }}
-          onPause={() => { setplay(false); }}
-        />
-        <ProgressBar progress={progress} />
-      </View>
-    </View>
-  );
+type AudioProps = {
+  file: string
+};
+type AudioState = {
+  playbackObj: Audio.Sound | null,
+  isPlaying: Boolean,
+  hasStarted: Boolean,
+  progress: number,
+  duration: number,
 };
 
-export default AudioPlayer;
+
+export default class AudioPlayer extends React.Component<AudioProps, AudioState> {
+  state: AudioState = {
+    playbackObj: null,
+    isPlaying: false,
+    hasStarted: false,
+    progress: 0,
+    duration: 0,
+  };
+
+  async componentDidMount(): Promise<void> {
+    const playbackObject = new Audio.Sound();
+    playbackObject.setOnPlaybackStatusUpdate(
+      (s: AVPlaybackStatus) => {
+        _onPlaybackUpdate(
+          s,
+          (prog: number) => { this.setState({ progress: prog }); },
+        );
+      }
+    );
+
+    try {
+      await playbackObject.loadAsync({ uri: this.props.file });
+      await playbackObject.playAsync();
+    } catch (e) {
+      console.log(`LOAD: ${e}`);
+    }
+    this.setState({
+      playbackObj: playbackObject,
+      isPlaying: true,
+      hasStarted: true
+    });
+  }
+
+  async componentDidUpdate(
+    prevProps: Readonly<AudioProps>,
+    prevState: Readonly<AudioState>,
+    snapshot?: any
+  ): Promise<void> {
+    try {
+      if (this.state.hasStarted && this.state.playbackObj) {
+        if (prevState.isPlaying && !this.state.isPlaying) {
+          await this.state.playbackObj.pauseAsync();
+        } else if (!prevState.isPlaying && this.state.isPlaying) {
+          await this.state.playbackObj.playAsync();
+        }
+      }
+    } catch (e) {
+      console.log(`PLAY/PAUSE: ${e}`);
+    }
+  }
+
+  async componentWillUnmount(): Promise<void> {
+      if (this.state.playbackObj) {
+        await this.state.playbackObj.stopAsync();
+        await this.state.playbackObj.unloadAsync();
+      }
+  }
+
+  render(): React.ReactNode {
+    return (
+      <View>
+        <View style={{ height: 60, width: '100%' }}>
+          <Controls
+            playing={this.state.isPlaying}
+            onPlay={() => { this.setState({ isPlaying: true }); }}
+            onPause={() => { this.setState({ isPlaying: false }); }}
+          />
+        </View>
+        <View>
+          <ProgressBar progress={this.state.progress} />
+        </View>
+      </View>
+    );
+  }
+}

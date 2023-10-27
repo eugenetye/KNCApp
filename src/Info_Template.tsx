@@ -61,16 +61,16 @@ const AudioPlay = ({ file }: { file: string}) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   return (
-  <SafeAreaView className='flex-1 relative'>
+  <SafeAreaView className='flex-1'>
   <ScrollView className='flex-1 px-4 py-6'>
-    <View className='relative'>
-      <View className='absolute flex-row inset-x-0 justify-between '>
+      <View className='flex-row inset-x-0 justify-between '>
         <Pressable onPress={() => navigation.goBack()}
           className='w-10 h-10 rounded-md items-center justify-center bg-white'>
           <Ionicons size={24} name="arrow-back"></Ionicons>
         </Pressable>
       </View>
-      <AudioPlayer file={file}/>
+    <View>
+     <AudioPlayer file={file}/>
     </View>
   </ScrollView>
 </SafeAreaView>

@@ -14,9 +14,6 @@ type QRProps = {
 type QRState = {
   hasCameraPermission: Boolean,
   audioFile: string,
-  isPlaying: Boolean,
-  progress: number,
-  duration: number,
 };
 
 const SAVE_DIR = FileSys.cacheDirectory + 'kncapp/';
@@ -37,10 +34,6 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
   state: QRState = {
     hasCameraPermission: false,
     audioFile: '',
-    isPlaying: false,
-    progress: 0,
-    duration: 0,
-
   };
 
   componentDidMount() {
