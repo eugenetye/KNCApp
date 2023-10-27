@@ -7,6 +7,10 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import AudioPlayer from '../components/AudioPlayer';
+import * as FileSys from 'expo-file-system';
+import CachedImage from '../components/CachedImage';
+
+
 
 const styles = StyleSheet.create({
   header: {
@@ -77,12 +81,10 @@ const TextAndPicture = (route : any) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const item = route.params.param
-  console.log(item)
 
   const imgLink = setImageLink(item.uid, item.type);
 
   const [url, setUrl] = useState(imgLink);
-
   useEffect(() => {
       const func = async () => {
       const reference = ref(FIREBASE_STORAGE, imgLink); 
@@ -94,25 +96,74 @@ const TextAndPicture = (route : any) => {
       func();
   }, []);
 
-  
-  
   useLayoutEffect(() => {
       navigation.setOptions({
         headerShown: false,
       });
   }, []);
 
+  const showLength = () => {
+    if (item.type === "trails") {
+        return (
+          <View className='py-5'>
+            <Text
+              style={{
+                fontSize: 20,
+                fontWeight: "bold",
+              }}
+            >
+              {item.length}
+            </Text>
+      </View>  
+        )
+    }
+    else {
+        return (<Text disabled={true}/>)
+    }
+}
+
+  const showTrailMap = ()=> {
+    if (item.type === "trails") {
+      return(
+       <View>
+          <CachedImage url = {'/trails/trail_map.jpeg'} style={{width: 300, height: 300}}/>
+        </View>
+      )
+      }
+  };
+
+
+
   const showButton = () => {
       if (item.type === "trails") {
           return (
-            <Pressable style={styles.button} onPress={() => alert('Button pressed')}>
-            <Text style={styles.text}>Access the trail map here</Text>
-          </Pressable>  
+            <Pressable className='mt-10 mb-11' style={styles.button}>
+            <Text style={styles.text}>Access the Trail Map Here</Text>
+          </Pressable>
           )
       }
       else {
           return (<Text disabled={true}/>)
       }
+  }
+
+  const displayDescription = (description: string[]) => {
+    const descriptionElements = description.map((item, index) => (
+      <View key={index}>
+        <Text 
+          style={{
+            fontSize: 21,
+            fontWeight: "500",
+            fontFamily: 'Questrial-Regular',
+          }}
+        >
+          {item}
+        </Text >
+        {index < description.length - 1 && <Text>{'\n'}</Text>}
+      </View>
+    ));
+  
+    return descriptionElements;
   }
 
   return (
@@ -140,21 +191,14 @@ const TextAndPicture = (route : any) => {
         </Text>
       </View>
       <View>
-      <Image className='w-full h-40 object-cover rounded-2xl mt-3'
+      <Image className='w-full h-40 object-cover rounded-2xl mt-3 mb-4'
           source={{ uri: url }}
       />
-      <View className='py-5 mt-3'>
-        <Text
-          style={{
-            fontSize: 19,
-            fontWeight: "500",
-            fontFamily: 'Questrial-Regular',
-          }}
-        >
-          {item.description}
-        </Text>
-      </View>
+      {showLength()}
+      {displayDescription(item.description)}
+
       {showButton()}
+      <View style={{height:80}} />
       </View>
         </View>
       </ScrollView>
@@ -164,7 +208,6 @@ const TextAndPicture = (route : any) => {
 
 const Info_Template = ({ route }: any) => {
   const item = route.params.param;
-  console.log(route)
 
   return (item.audio
     ? <AudioPlay file={item.files[0]} />
