@@ -5,6 +5,7 @@ import React from 'react';
 import { Image } from 'react-native';
 
 import Info_Template from './src/Info_Template';
+import {Trail_Map} from './src/Trail_Map';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,15 @@ export default function App() {
 
           options={{
           headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Trail_Map"
+        component={Trail_Map}
+
+        options={{
+        headerShown: true,
+        headerTitle: "Trail Map",
         }}
       />
       </Stack.Navigator>

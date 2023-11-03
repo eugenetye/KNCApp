@@ -10,8 +10,6 @@ import AudioPlayer from '../components/AudioPlayer';
 import * as FileSys from 'expo-file-system';
 import CachedImage from '../components/CachedImage';
 
-
-
 const styles = StyleSheet.create({
   header: {
     alignItems: 'flex-start', 
@@ -55,6 +53,8 @@ const setImageLink = (uid: string, type: string) => {
 
 export type RootStackParamList = {
   Trails: { param?: any } | undefined;
+  Info_Template: { param?: any } | undefined;
+  Trail_Map: { param?: any } | undefined;
 };
 
 const AudioPlay = ({ file }: { file: string}) => {
@@ -84,17 +84,6 @@ const TextAndPicture = (route : any) => {
 
   const imgLink = setImageLink(item.uid, item.type);
 
-  const [url, setUrl] = useState(imgLink);
-  useEffect(() => {
-      const func = async () => {
-      const reference = ref(FIREBASE_STORAGE, imgLink); 
-      await getDownloadURL(reference).then((x) => {
-          setUrl(x);
-      })
-  }
-
-      func();
-  }, []);
 
   useLayoutEffect(() => {
       navigation.setOptions({
@@ -122,22 +111,10 @@ const TextAndPicture = (route : any) => {
     }
 }
 
-  const showTrailMap = ()=> {
-    if (item.type === "trails") {
-      return(
-       <View>
-          <CachedImage url = {'/trails/trail_map.jpeg'} style={{width: 300, height: 300}}/>
-        </View>
-      )
-      }
-  };
-
-
-
   const showButton = () => {
       if (item.type === "trails") {
           return (
-            <Pressable className='mt-10 mb-11' style={styles.button}>
+            <Pressable className='mt-10 mb-11' style={styles.button} onPress={() => navigation.navigate('Trail_Map')}>
             <Text style={styles.text}>Access the Trail Map Here</Text>
           </Pressable>
           )
@@ -161,7 +138,7 @@ const TextAndPicture = (route : any) => {
         </Text >
         {index < description.length - 1 && <Text>{'\n'}</Text>}
       </View>
-    ));
+    ));      
   
     return descriptionElements;
   }
@@ -191,8 +168,8 @@ const TextAndPicture = (route : any) => {
         </Text>
       </View>
       <View>
-      <Image className='w-full h-40 object-cover rounded-2xl mt-3 mb-4'
-          source={{ uri: url }}
+      <CachedImage className='w-full h-40 object-cover rounded-2xl mt-3 mb-4'
+          url = {imgLink}
       />
       {showLength()}
       {displayDescription(item.description)}

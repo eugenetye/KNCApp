@@ -4,6 +4,7 @@ import { FIREBASE_STORAGE } from "../firebaseConfig";
 import { ref, getDownloadURL } from "firebase/storage";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
+import CachedImage from "../components/CachedImage";
 
 export type RootStackParamList = {
   Info_Template: { param: any } | undefined;
@@ -24,19 +25,6 @@ export const IndividualItem = ({ item }: any) => {
 
   const imgLink = setImageLink(item.uid, item.type);
 
-  const [url, setUrl] = useState(imgLink);
-
-  useEffect(() => {
-    const func = async () => {
-      const reference = ref(FIREBASE_STORAGE, imgLink);
-      await getDownloadURL(reference).then((x) => {
-        setUrl(x);
-      })
-    }
-
-    func();
-  }, []);
-
 
 
   return (
@@ -54,9 +42,9 @@ export const IndividualItem = ({ item }: any) => {
         }}
       >
         <View style={{ paddingVertical: 12 }}>
-          <Image
+          <CachedImage
+            url= {imgLink}
             style={{ width: 340, height: 150, borderRadius: 8 }}
-            source={{ uri: url }}
           />
         </View>
 
