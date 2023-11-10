@@ -6,6 +6,7 @@ import { Image } from 'react-native';
 
 import Info_Template from './src/Info_Template';
 import {Trail_Map} from './src/Trail_Map';
+import Event_template from './src/Event_template';
 
 const Stack = createNativeStackNavigator();
 
@@ -35,6 +36,13 @@ export default function App() {
           component={Info_Template}
 
           options={{
+          headerShown: false,
+        }}
+      />
+      <Stack.Screen
+        name="Event_template"
+        component={Event_template}
+        options={{
           headerShown: false,
         }}
       />

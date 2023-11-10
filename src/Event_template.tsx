@@ -1,0 +1,266 @@
+import {
+  ScrollView,
+  Text,
+  View,
+  Pressable,
+  Image,
+  StyleSheet,
+  Dimensions,
+} from "react-native";
+import React, { useEffect, useLayoutEffect, useState } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { FIREBASE_STORAGE } from "../firebaseConfig";
+import { ref, getDownloadURL, listAll, connectStorageEmulator } from "firebase/storage";
+import Ionicons from "@expo/vector-icons/Ionicons";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { NativeStackNavigationProp } from "@react-navigation/native-stack";
+import AudioPlayer from "../components/AudioPlayer";
+import * as FileSys from "expo-file-system";
+import CachedImage from "../components/CachedImage";
+import Carousel from "react-native-snap-carousel";
+
+const { height, width } = Dimensions.get("window");
+
+const styles = StyleSheet.create({
+  itemContainer: {
+    flex: 1, // this will make the container expand to fill available space
+    alignItems: "center",
+
+    backgroundColor: "white",
+
+    borderRadius: 8,
+
+    padding: 20,
+
+    justifyContent: "flex-start", // changed from 'center' to 'flex-start' to align children to the top
+
+    marginTop: 60, // adjust this value to shift the container down under the back arrow
+  },
+
+  itemImg: {
+    width: width * 0.8, // 80% of screen width
+
+    height: height * 0.3, // 30% of screen height
+
+    borderRadius: 8, // Added rounding to images
+  },
+
+  itemTitle: {
+    fontSize: 24,
+
+    fontWeight: "bold",
+
+    marginTop: 10, // Space between the image and title
+  },
+
+  itemBody: {
+    fontSize: 16,
+
+    marginTop: 5, // Space between the title and body
+
+    textAlign: "center", // Center the text if it's a short sentence
+  },
+
+  safeArea: {
+    flex: 1,
+
+    backgroundColor: "#F8F8F8", // or any other background color you prefer
+  },
+
+  scrollView: {
+    flex: 1,
+  },
+
+  viewContainer: {
+    flex: 1,
+  },
+
+  backButton: {
+    position: "absolute",
+
+    top: 10, // safe distance from the top edge
+
+    left: 10,
+
+    width: 50,
+
+    height: 50,
+
+    borderRadius: 25,
+
+    alignItems: "center",
+
+    justifyContent: "center",
+
+    backgroundColor: "white",
+
+    zIndex: 1,
+  },
+});
+
+const setImageLink = (uid: string, type: string) => {
+  let pages: string[] = ["discover", "current", "past", "trails"];
+
+  for (let i = 0; i < pages.length; i++) {
+    if (type == pages[i]) {
+      return "/" + pages[i] + "/fire_story/" + uid + ".jpeg";
+    }
+  }
+};
+
+export type RootStackParamList = {
+  Past: { param?: any } | undefined;
+
+  Event_template: { param?: any } | undefined;
+
+  Event_item: { param?: any } | undefined;
+};
+
+const AudioPlay = ({ file }: { file: string }) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  return (
+    <SafeAreaView className="flex-1">
+      <ScrollView className="flex-1 px-4 py-6">
+        <View className="flex-row inset-x-0 justify-between ">
+          <Pressable
+            onPress={() => navigation.goBack()}
+            className="w-10 h-10 rounded-md items-center justify-center bg-white"
+          >
+            <Ionicons size={24} name="arrow-back"></Ionicons>
+          </Pressable>
+        </View>
+
+        <View>
+          <AudioPlayer file={file} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const TextAndPicture = (route: any) => {
+  const navigation =
+    useNavigation<NativeStackNavigationProp<RootStackParamList>>();
+
+  const item = route.params.param;
+
+  const imgLink = setImageLink(item.uid, item.type);
+  console.log(imgLink)
+
+  //code from gpt
+
+  const [images, setImages] = useState<any[]>([]);
+
+  const [url, setUrl] = useState(imgLink);
+
+  useEffect(() => {
+    const fetchImages = async () => {
+      const folderRef = ref(FIREBASE_STORAGE, "past/fire_story"); // Assuming item.type is the folder name
+
+      const listResult = await listAll(folderRef);
+      console.log(listResult)
+
+      const imageArray = await Promise.all(
+        listResult.items.map((obj, i) => {
+          return {
+            //title: imageRef.name,
+
+            body: item.bio[i], // Add description if needed
+
+            imgUrl: obj.fullPath,
+          };
+        })
+      );
+
+      setImages(imageArray);
+    };
+
+    fetchImages();
+  }, []);
+
+  const { width: screenWidth } = Dimensions.get("window");
+  const sliderWidth = screenWidth;
+  const itemWidth = screenWidth * 0.8;
+
+  interface YourItemType {
+    imgUrl: string;
+    title: string;
+    body: string;
+  }
+
+  const renderItem = ({ item }: { item: any }) => (
+    <View style={styles.itemContainer}>
+      <CachedImage url={'/' + item.imgUrl} style={styles.itemImg} />
+
+      <Text style={styles.itemTitle}>{item.title}</Text>
+
+      <Text style={styles.itemBody}>{item.body}</Text>
+    </View>
+  );
+
+  useEffect(() => {
+    const func = async () => {
+      const reference = ref(FIREBASE_STORAGE, imgLink);
+
+      await getDownloadURL(reference).then((x) => {
+        setUrl(x);
+      });
+    };
+
+    func();
+  }, []);
+
+  useLayoutEffect(() => {
+    navigation.setOptions({
+      headerShown: false,
+    });
+  }, []);
+
+  return (
+    <SafeAreaView className="flex-1 relative">
+      <ScrollView className="flex-1 px-4 py-6">
+        <View className="relative">
+          {/* Back button with higher zIndex */}
+
+          <View
+            className="absolute flex-row inset-x-0 justify-between"
+            style={{ zIndex: 1 }}
+          >
+            <Pressable
+              onPress={() => navigation.goBack()}
+              className="w-10 h-10 rounded-md items-center justify-center bg-white"
+            >
+              <Ionicons size={24} name="arrow-back" />
+            </Pressable>
+          </View>
+
+          {/* Picture or Carousel */}
+
+          <Carousel
+            layout="default"
+            data={images}
+            renderItem={renderItem}
+            sliderWidth={width}
+            itemWidth={width * 0.8}
+          />
+
+          <View style={{ height: 80 }} />
+        </View>
+      </ScrollView>
+    </SafeAreaView>
+  );
+};
+
+const Event_template = ({ route }: any) => {
+  const item = route.params.param;
+
+  return item.audio ? (
+    <AudioPlay file={item.files[0]} />
+  ) : (
+    <TextAndPicture {...route} />
+  );
+};
+
+export default Event_template;

@@ -3,7 +3,7 @@ import React, {useEffect, useState} from 'react'
 import { useFonts } from 'expo-font';
 import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
 import { collection, onSnapshot } from 'firebase/firestore';
-import { IndividualItem } from '../components/IndividualItem';
+import { Event_item } from '../components/Event_item';
 
 export const Past = () => {
   const [fontsLoaded] = useFonts({
@@ -43,7 +43,7 @@ export const Past = () => {
         </View>
 
         {datas.map((data, i) => (
-            <IndividualItem key={i} item={data}/> 
+            <Event_item key={i} item={data}/> 
           ))}
 
       </View>
