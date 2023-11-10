@@ -1,9 +1,0 @@
-{
-    "description": "This is an audio test...",
-    "difficulty": "Hard",
-    "length": "0.69 mile loop",
-    "name": "Audio Test",
-    "uid": "audio_test",
-    "audio": true,
-    "files": ["ff-16b-2c-44100hz"]
-}

@@ -1,22 +1,23 @@
 import { View, Text } from 'react-native'
-import React, { useEffect } from 'react'
-import { useFonts } from 'expo-font';
+import React from 'react'
 import { BarCodeScanner } from 'expo-barcode-scanner';
 import * as FileSys from 'expo-file-system';
-import { AVPlaybackStatus, Audio } from 'expo-av';
-import AudioPlayer from '../components/AudioPlayer';
-import { FIREBASE_STORAGE } from "../firebaseConfig";
+import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
 import { ref, getDownloadURL } from "firebase/storage";
+import { DocumentSnapshot, doc, getDoc } from 'firebase/firestore';
+import { useIsFocused } from '@react-navigation/native';
 
 type QRProps = {
   navigation: any
 };
 type QRState = {
   hasCameraPermission: Boolean,
+  key: number,
   audioFile: string,
 };
 
-const SAVE_DIR = FileSys.cacheDirectory + 'kncapp/';
+export const SAVE_DIR = FileSys.cacheDirectory + 'kncapp/';
+const AUDIO = 'audio/';
 
 async function ensureDirExists() {
   await FileSys.makeDirectoryAsync(SAVE_DIR, { intermediates: true });
@@ -34,10 +35,12 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
   state: QRState = {
     hasCameraPermission: false,
     audioFile: '',
+    key: 0
   };
 
-  componentDidMount() {
-    this._requestCameraPermission();
+  async componentDidMount() {
+    await this._requestCameraPermission();
+    this.setState({key: -1})
   }
 
   _requestCameraPermission = async () => {
@@ -48,35 +51,47 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
   };
 
   _handleBarCodeRead = async (result: any) => {
-    var new_param = JSON.parse(result.data);
+    var path: string[] = result.data.split('/');
+    console.log(path);
 
-    // We only cache audio so far
-    //
-    // TODO: this will actually need to be a loop, the
-    // first QR code we scan at the KNC building will start
-    // downloading all the audio files and pictures if there are
-    // any.
-    if (new_param.audio) {
+    var data_doc: DocumentSnapshot;
+    try {
+      data_doc = await getDoc(doc(
+        FIRESTORE_DB,
+        path.splice(0, 1)[0],
+        ...path
+      ));
+    } catch (e) {
+      console.log(`Fetch doc err: ${e}`);
+      return;
+    }
+
+    console.log(data_doc.data());
+    if (data_doc.get('audio')) {
       try {
         if (!(await saveDirExists())) {
           await ensureDirExists();
         }
-        for (let i = 0; i < new_param.files.length; i++) {
-          const file = new_param.files[i];
+        for (let i = 0; i < data_doc.get('files').length; i++) {
+          const file = data_doc.get('files')[i];
           if (!(await saveFileExists(SAVE_DIR + file + '.mp3'))) {
-            const reference = ref(FIREBASE_STORAGE, file + '.mp3');
+            const reference = ref(FIREBASE_STORAGE, AUDIO + file + '.mp3');
             const url = await getDownloadURL(reference);
             await FileSys.downloadAsync(url, SAVE_DIR + file + '.mp3');
           }
-          new_param.files[i] = SAVE_DIR + file + '.mp3';
         }
+        alert("All audio has downloaded");
+        this.setState((prev, props) => { return {key: prev.key + 1}; });
+        return;
       } catch (e) {
         console.log(`We got an error: ${e}`);
       }
     }
 
+    this.setState((prev, props) => { return {key: prev.key + 1}; });
+
     // This happens for both audio and picture pages
-    this.props.navigation.navigate('Info_Template', { param: new_param });
+    this.props.navigation.navigate('Info_Template', { param: data_doc.data() });
   };
 
   render() {
@@ -95,6 +110,7 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
               width: '100%'
             }}>
             <BarCodeScanner
+              key={this.state.key}
               onBarCodeScanned={this._handleBarCodeRead}
               style={{
                 height: '100%',
