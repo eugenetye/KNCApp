@@ -104,22 +104,10 @@ const TextAndPicture = (route: any) => {
     }
   }
 
-  const showTrailMap = () => {
-    if (item.type === "trails") {
-      return (
-        <View>
-          <CachedImage url={'/trails/trail_map.jpeg'} style={{ width: 300, height: 300 }} />
-        </View>
-      )
-    }
-  };
-
-
-
   const showButton = () => {
     if (item.type === "trails") {
       return (
-        <Pressable className='mt-10 mb-11' style={styles.button}>
+        <Pressable style={styles.button} className='mt-10 mb-11' onPress={() => navigation.navigate('Trail_Map')}>
           <Text style={styles.text}>Access the Trail Map Here</Text>
         </Pressable>
       )
