@@ -1,8 +1,7 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import CachedImage from '../components/CachedImage';
-import { WebView } from 'react-native-webview';
 
 export const Trail_Map = () => {
   return (
@@ -23,7 +22,7 @@ const styles = StyleSheet.create({
   },
   image: {
     flex: 1,
-    resizeMode: 'contain',
+    resizeMode: 'cover',
   },
 });
 

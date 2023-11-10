@@ -4,17 +4,14 @@ import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
 import { collection, onSnapshot } from 'firebase/firestore';
-// import { DiscoverImage } from '../components/DiscoverImage';
-import { IndividualItem } from '../components/IndividualItem';
-import { ref, getDownloadURL } from "firebase/storage";
-import Ionicons from "@expo/vector-icons/Ionicons";
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { NativeStackNavigationProp } from '@react-navigation/native-stack';
+import CachedImage from '../components/CachedImage';
+import { StackNavigationProp } from '@react-navigation/stack';
+
+export type RootStackParamList = {
+  Info_Template: { param: any } | undefined;
+}
 
 const styles = StyleSheet.create({
-  header: {
-    alignItems: 'flex-start', 
-  },  
   image: {
     marginTop: -20,
     alignItems: 'center', 
@@ -29,16 +26,6 @@ const styles = StyleSheet.create({
     height: 50,
     width: "80%",
     marginBottom: 10,
-  },
-  text: {
-    color: 'white',
-    fontSize: 20,
-    fontFamily: 'Questrial-Regular',
-  },
-  headertext: {
-    fontFamily: 'Questrial-Regular', 
-    fontSize: 40, 
-    padding: 15,
   }
 });
 
@@ -48,6 +35,7 @@ export const Discover = () => {
   });
 
   const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
+  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
 
   useEffect(() => {
     const querySnapshot = collection(FIRESTORE_DB, "discover");
@@ -68,32 +56,31 @@ export const Discover = () => {
 
     return () => subscriber();
   }, []);
-  
     
   return (
     <ScrollView>
       <View>
-        <View style={styles.header}>
-          <Text style={styles.headertext}>Discover</Text>
+      <View>
+          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Discover</Text>
         </View>
-        <View style={styles.image}> 
-          {datas.map((data, i) => (
-              <IndividualItem key={i} item={data}/>
-            ))}
+        <View style={{ 
+          paddingVertical: 12, backgroundColor: "#F8F8F8",
+          borderRadius: 8,
+          padding: 10,
+          flexDirection: "column",
+          alignItems: "flex-start",
+          justifyContent: "space-between",
+          margin: 14, }}>
+
+          <CachedImage className='w-full h-40 object-cover rounded-2xl mt-3 mb-4' url = {'/discover/discover.jpeg'}
+          />
         </View>
         <View style={{alignItems: 'center'}}>
-          <Pressable style={styles.button} onPress={() => alert('Button pressed')}>
-            <Text style={styles.text}>About KNC</Text>
-          </Pressable>
-          <Pressable style={styles.button} onPress={() => alert('Button pressed')}>
-            <Text style={styles.text}>Opening Hours</Text>
-          </Pressable>
-          <Pressable style={styles.button} onPress={() => alert('Button pressed')}>
-            <Text style={styles.text}>App Guide</Text>
-          </Pressable>
-          <Pressable style={styles.button} onPress={() => alert('Button pressed')}>
-            <Text style={styles.text}>Support</Text>
-          </Pressable>          
+          {datas.map((data, i) => (
+              <Pressable style={styles.button} key={i} onPress={() => navigation.navigate('Info_Template', { param: data })}>
+              <Text style={{color: 'white', fontSize: 20, fontFamily: 'Questrial-Regular'}}>{data.title}</Text>
+              </Pressable>
+            ))}       
         </View>
 
       </View>
@@ -101,6 +88,3 @@ export const Discover = () => {
   )
 
 }
-
-// create a discover image function like individualitem
-// or paste it in discover and modify

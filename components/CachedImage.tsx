@@ -1,8 +1,9 @@
-import { Image } from 'react-native'
-import React, { useEffect, useState } from 'react'
+import { Image, View } from 'react-native'
+import React, { forwardRef, useEffect, useState } from 'react'
 import * as FileSystem from 'expo-file-system';
 import { FIREBASE_STORAGE } from "../firebaseConfig";
 import { ref, getDownloadURL } from "firebase/storage";
+import { GestureHandlerRootView, PinchGestureHandler, State } from 'react-native-gesture-handler';
 
 const CachedImage = (props : any) => {
     const {url, style} = props;
@@ -45,12 +46,12 @@ const CachedImage = (props : any) => {
           } 
     }
 
+    
+
     return (
-      <Image source={{ uri: cachedUri }} style={style}/>)
+      <Image source={{ uri: cachedUri }} style={style}/>
+    )
 }
 
 export default CachedImage;
 
-
-
-        

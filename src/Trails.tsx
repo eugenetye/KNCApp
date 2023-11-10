@@ -30,13 +30,10 @@ export const Trails = () => {
       },
     });
 
-    // console.log(datas)
-
     return () => subscriber();
   }, []);
   
     
-  
   return (
     <ScrollView>
       <View>
