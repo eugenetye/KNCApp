@@ -53,7 +53,7 @@ const setImageLink = (uid: string, type: string) => {
   }
 }
 
-export type RootStackParamList = {
+export type RootStackParamList = { 
   Trails: { param?: any } | undefined;
   Info_Template: { param?: any } | undefined;
   Trail_Map: { param?: any } | undefined;
@@ -137,6 +137,7 @@ const TextAndPicture = (route: any) => {
             fontSize: 21,
             fontWeight: "500",
             fontFamily: 'Questrial-Regular',
+            lineHeight: 30,
           }}
         >
           {item}

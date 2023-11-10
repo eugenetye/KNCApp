@@ -30,12 +30,10 @@ export const Past = () => {
       },
     });
 
-    // console.log(datas)
-
     return () => subscriber();
   }, []);
   
-    
+    console.log(datas)
   
   return (
     <ScrollView>
