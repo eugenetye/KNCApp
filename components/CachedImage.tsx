@@ -17,7 +17,7 @@ const CachedImage = (props : any) => {
         // Create a file path by concatenating 'FileSystem.cacheDirectory' and 'kncapp/'.
         const path = FileSystem.cacheDirectory + 'kncapp/';
 
-        const category = url.split('/')[1];
+        const category = url.split('/').slice(1, -1).join('/');
 
         // Ensure the cache directory exists
         await FileSystem.makeDirectoryAsync(path + category + '/', { intermediates: true });
