@@ -8,7 +8,7 @@ import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import AudioPlayer from '../components/AudioPlayer';
 import CachedImage from '../components/CachedImage';
-import { SAVE_DIR } from './QRcode';
+import { SAVE_DIR, saveFileExists } from './QRcode';
 
 
 const styles = StyleSheet.create({
@@ -66,6 +66,7 @@ const TextAndPicture = (route: any) => {
   const imgLink = setImageLink(item.uid, item.type);
 
   const [url, setUrl] = useState(imgLink);
+  const [render_player, setRenderPlayer] = useState(false);
   useEffect(() => {
     const func = async () => {
       const reference = ref(FIREBASE_STORAGE, imgLink);
@@ -136,6 +137,15 @@ const TextAndPicture = (route: any) => {
     return descriptionElements;
   }
 
+  useEffect(() => {
+    const func = async () => {
+      if (await saveFileExists(SAVE_DIR + item.audio_uid + ".mp3" )) {
+        setRenderPlayer(true);
+      }
+    }
+    func();
+  }, [item.audio_uid]);
+
   return (
     <SafeAreaView className='flex-1 relative'>
       <ScrollView className='flex-1 px-4 py-6'>
@@ -166,7 +176,7 @@ const TextAndPicture = (route: any) => {
             />
             {showLength()}
             {displayDescription(item.description)}
-            {item.audio_uid ? <AudioPlayer file={SAVE_DIR + item.audio_uid + ".mp3"} /> : null}
+            {render_player ? <AudioPlayer file={SAVE_DIR + item.audio_uid + ".mp3"} /> : null}
             {showButton()}
           <View style={{ height: 80 }} />
           </View>

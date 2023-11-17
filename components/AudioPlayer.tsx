@@ -5,8 +5,6 @@ import { ProgressBar } from 'react-native-paper';
 import { AVPlaybackStatus, Audio } from 'expo-av';
 
 const _onPlaybackUpdate = (status: AVPlaybackStatus, setprog: any) => {
-  console.log(status);
-
   if (status.isLoaded) {
     const prog = status.durationMillis
       ? status.positionMillis / status.durationMillis
@@ -79,14 +77,13 @@ export default class AudioPlayer extends React.Component<AudioProps, AudioState>
     );
 
     try {
-      await playbackObject.loadAsync({ uri: this.props.file });
-      await playbackObject.playAsync();
+      await playbackObject.loadAsync({ uri: this.props.file }, { shouldPlay: false });
     } catch (e) {
       console.log(`LOAD: ${e}`);
     }
     this.setState({
       playbackObj: playbackObject,
-      isPlaying: true,
+      isPlaying: false,
       hasStarted: true
     });
   }
