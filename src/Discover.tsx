@@ -56,35 +56,39 @@ export const Discover = () => {
 
     return () => subscriber();
   }, []);
-    
-  return (
-    <ScrollView>
-      <View>
-      <View>
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Discover</Text>
-        </View>
-        <View style={{ 
-          paddingVertical: 12, backgroundColor: "#F8F8F8",
-          borderRadius: 8,
-          padding: 10,
-          flexDirection: "column",
-          alignItems: "flex-start",
-          justifyContent: "space-between",
-          margin: 14, }}>
 
-          <CachedImage className='w-full h-40 object-cover rounded-2xl mt-3 mb-4' url = {'/discover/discover.jpeg'}
-          />
-        </View>
-        <View style={{alignItems: 'center'}}>
-          {datas.map((data, i) => (
-              <Pressable style={styles.button} key={i} onPress={() => navigation.navigate('Info_Template', { param: data })}>
-              <Text style={{color: 'white', fontSize: 20, fontFamily: 'Questrial-Regular'}}>{data.title}</Text>
-              </Pressable>
-            ))}       
-        </View>
+  if (fontsLoaded) {
+    return (
+      <ScrollView>
+        <View>
+        <View>
+            <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Discover</Text>
+          </View>
+          <View style={{ 
+            paddingVertical: 12, backgroundColor: "#F8F8F8",
+            borderRadius: 8,
+            padding: 10,
+            flexDirection: "column",
+            alignItems: "flex-start",
+            justifyContent: "space-between",
+            margin: 14, }}>
 
-      </View>
-    </ScrollView>
-  )
+            <CachedImage className='w-full h-40 object-cover rounded-2xl mt-3 mb-4' url = {'/discover/discover.jpeg'}
+            />
+          </View>
+          <View style={{alignItems: 'center'}}>
+            {datas.map((data, i) => (
+                <Pressable style={styles.button} key={i} onPress={() => navigation.navigate('Info_Template', { param: data })}>
+                <Text style={{color: 'white', fontSize: 20, fontFamily: 'Questrial-Regular'}}>{data.title}</Text>
+                </Pressable>
+              ))}       
+          </View>
+
+        </View>
+      </ScrollView>
+    )
+  } else {
+    return null;
+  }
 
 }
