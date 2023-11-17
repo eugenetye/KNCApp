@@ -6,9 +6,7 @@ import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 
 export type RootStackParamList = {
-  Past: { param?: any } | undefined;
   Event_template: { param?: any } | undefined;
-  Event_item: { param?: any } | undefined;
 }
 
 const setImageLink = (uid: string, type: string) => {

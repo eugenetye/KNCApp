@@ -18,6 +18,7 @@ import AudioPlayer from "../components/AudioPlayer";
 import * as FileSys from "expo-file-system";
 import CachedImage from "../components/CachedImage";
 import Carousel from "react-native-snap-carousel";
+import { Linking } from "react-native";
 
 const { height, width } = Dimensions.get("window");
 
@@ -53,10 +54,19 @@ const styles = StyleSheet.create({
     marginTop: 10, // Space between the image and title
   },
 
-  itemBody: {
-    fontSize: 16,
+  itemTitle2: {
+    fontSize: 17, // You can customize these values
+    fontWeight: "bold",
+    color: "#333333", // Example color
+    marginTop: 5, // Adjust spacing as needed
+    textAlign: "center", // Customize alignment
+    // Add other styling properties as needed
+  },
 
-    marginTop: 5, // Space between the title and body
+  itemBody: {
+    fontSize: 15,
+    lineHeight: 20,
+    marginTop: 10, // Space between the title and body
 
     textAlign: "center", // Center the text if it's a short sentence
   },
@@ -98,6 +108,38 @@ const styles = StyleSheet.create({
   },
 });
 
+const button = StyleSheet.create({
+  header: {
+    alignItems: 'flex-start',
+  },
+  image: {
+    marginTop: -20,
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  button: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#046339',
+    borderRadius: 15,
+    padding: 10,
+    height: 50,
+    width: "100%",
+    marginBottom: 10,
+  },
+  text: {
+    color: 'white',
+    fontSize: 20,
+    fontFamily: 'Questrial-Regular',
+  },
+  headertext: {
+    fontFamily: 'Questrial-Regular',
+    fontSize: 40,
+    padding: 15,
+  }
+});
+
+
 const setImageLink = (uid: string, type: string) => {
   let pages: string[] = ["discover", "current", "past", "trails"];
 
@@ -108,11 +150,14 @@ const setImageLink = (uid: string, type: string) => {
   }
 };
 
+const handleLink1 = () => {
+  window.open("https://storymaps.com/stories/09ed079e0c49449fa0f363f0d87b052c")
+}
+
 export type RootStackParamList = {
   Past: { param?: any } | undefined;
-
+  Current: { param?: any } | undefined;
   Event_template: { param?: any } | undefined;
-
   Event_item: { param?: any } | undefined;
 };
 
@@ -156,7 +201,7 @@ const TextAndPicture = (route: any) => {
 
   useEffect(() => {
     const fetchImages = async () => {
-      const folderRef = ref(FIREBASE_STORAGE, "past/fire_story"); // Assuming item.type is the folder name
+      const folderRef = ref(FIREBASE_STORAGE, item.type + "/fire_story"); // Assuming item.type is the folder name
 
       const listResult = await listAll(folderRef);
 
@@ -164,13 +209,13 @@ const TextAndPicture = (route: any) => {
         listResult.items.map((obj, i) => {
           return {
             //title: imageRef.name,
-
-            body: item.bio[i], // Add description if needed
-
+            body: item.bio[i], // Existing description
             imgUrl: obj.fullPath,
+            header1: item.header1[i], // Assuming these are arrays and have the same length as bio
+            header2: item.header2[i],
           };
         })
-      );
+      ); 
 
       setImages(imageArray);
     };
@@ -186,14 +231,16 @@ const TextAndPicture = (route: any) => {
     imgUrl: string;
     title: string;
     body: string;
+    header1: string;
+    header2: string;
   }
 
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.itemContainer}>
       <CachedImage url={'/' + item.imgUrl} style={styles.itemImg} />
 
-      <Text style={styles.itemTitle}>{item.title}</Text>
-
+      <Text style={styles.itemTitle}>{item.header1}</Text>
+      <Text style={styles.itemTitle2}>{item.header2}</Text>
       <Text style={styles.itemBody}>{item.body}</Text>
     </View>
   );
@@ -243,7 +290,16 @@ const TextAndPicture = (route: any) => {
             sliderWidth={width}
             itemWidth={width * 0.8}
           />
-
+          <Pressable 
+            style={button.button} 
+            className='mt-10 mb-11' 
+            onPress={() => {
+              Linking.openURL('https://storymaps.com/stories/09ed079e0c49449fa0f363f0d87b052c')
+                .catch(err => console.error('An error occurred', err));
+            }}
+          >
+            <Text style={button.text}>Access the Story Map Here</Text>
+          </Pressable>
           <View style={{ height: 80 }} />
         </View>
       </ScrollView>
