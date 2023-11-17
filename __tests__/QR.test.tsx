@@ -1,11 +1,11 @@
 import React from 'react';
-import {create} from 'react-test-renderer';
+import {act, create, ReactTestRendererJSON} from 'react-test-renderer';
 
-import App from '../App';
+import QRScanner from '../src/QRcode';
 
 describe('<App />', () => {
   it('has 1 child', async () => {
-    const tree = create(<App />).toJSON();
+    const tree = create(<QRScanner navigation={null} />).toJSON();
     if (tree && 'children' in tree) {
       expect(tree.children!.length).toBe(1);
     } else {

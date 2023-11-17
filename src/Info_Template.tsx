@@ -7,7 +7,6 @@ import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
 import AudioPlayer from '../components/AudioPlayer';
-import * as FileSys from 'expo-file-system';
 import CachedImage from '../components/CachedImage';
 import { SAVE_DIR } from './QRcode';
 
