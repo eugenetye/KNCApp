@@ -42,14 +42,14 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
     await this._requestCameraPermission();
   }
 
-  async _requestCameraPermission() {
+  _requestCameraPermission = async () => {
     const obj = await BarCodeScanner.requestPermissionsAsync();
     this.setState({
       hasCameraPermission: obj.status === 'granted',
     });
   }
 
-  async _handleBarCodeRead(result: any) {
+  _handleBarCodeRead = async (result: any) => {
     var path: string[] = result.data.split('/');
     var data_doc: DocumentSnapshot;
     try {
@@ -78,6 +78,7 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
         }
         this.setState({ all_downloaded: true });
         this.props.navigation.navigate('Trails');
+        return;
       } catch (e) {
         console.log(`While downloading all files: ${e}`);
       }

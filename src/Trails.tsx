@@ -19,14 +19,14 @@ export const Trails = () => {
 
     const subscriber = onSnapshot(querySnapshot, {
       next: (snapshot) => {
-        const datas: any[] = [];
+        var d: any[] = [];
         snapshot.docs.forEach((doc) => {
-          datas.push({
+          d.push({
             id: doc.id,
             ...doc.data(),
           })
         });
-        setDatas(datas);
+        setDatas(d);
       },
     });
 

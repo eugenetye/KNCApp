@@ -61,7 +61,7 @@ export type RootStackParamList = {
 const TextAndPicture = (route: any) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
-  const item = route.params.param
+  const item = route.params.param;
 
   const imgLink = setImageLink(item.uid, item.type);
 
