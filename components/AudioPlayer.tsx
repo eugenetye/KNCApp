@@ -18,24 +18,29 @@ const _onPlaybackUpdate = (status: AVPlaybackStatus, setprog: any) => {
   }
 }
 
-const Controls = ({ playing, onPlay, onPause }: { playing: Boolean, onPlay: any, onPause: any }) => {
+const Controls = ({ playing, onPlay, onPause }: { playing: Boolean, onPlay: () => void, onPause: () => void }) => {
   return (
     <View>
       <View style={{ display: 'flex', flexDirection: 'row' }}>
-        <Pressable onPress={onPlay}>
-          <Ionicons
-            name='play-circle'
-            size={50}
-            color={playing ? "#C5DFC5" : "grey"}
-          />
-        </Pressable>
-        <Pressable onPress={onPause}>
-          <Ionicons
-            name='pause-circle'
-            size={50}
-            color={(!playing) ? "#C5DFC5" : "grey"}
-          />
-        </Pressable>
+        {playing ? (
+          // Show pause button when playing
+          <Pressable onPress={onPause}>
+            <Ionicons
+              name='pause-circle'
+              size={50}
+              color={"gray"}
+            />
+          </Pressable>
+        ) : (
+          // Show play button when paused
+          <Pressable onPress={onPlay}>
+            <Ionicons
+              name='play-circle'
+              size={50}
+              color={"#C5DFC5"}
+            />
+          </Pressable>
+        )}
       </View>
     </View>
   );
@@ -113,8 +118,13 @@ export default class AudioPlayer extends React.Component<AudioProps, AudioState>
 
   render(): React.ReactNode {
     return (
-      <View>
-        <View style={{ height: 60, width: '100%' }}>
+      <View style={{
+        backgroundColor: "#F8F8F8",
+        borderRadius: 8,
+        padding: 15,
+      }}>
+        <Text style={{ padding: 3}}>Listen to the audio file here:</Text>
+        <View style={{ height: 60, width: '100%'}}>
           <Controls
             playing={this.state.isPlaying}
             onPlay={() => { this.setState({ isPlaying: true }); }}

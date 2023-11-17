@@ -29,8 +29,6 @@ export const Current = () => {
       },
     });
 
-    // console.log(datas)
-
     return () => subscriber();
   }, []);
 

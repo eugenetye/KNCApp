@@ -119,7 +119,7 @@ const TextAndPicture = (route: any) => {
 
   const displayDescription = (description: string[]) => {
     const descriptionElements = description.map((item, index) => (
-      <View key={index}>
+      <View key={index} className='mb-3'>
         <Text
           style={{
             fontSize: 21,
