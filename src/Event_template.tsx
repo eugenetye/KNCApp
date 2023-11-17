@@ -38,7 +38,7 @@ const styles = StyleSheet.create({
   },
 
   itemImg: {
-    width: width * 0.8, // 80% of screen width
+    width: width * 0.7, // 80% of screen width
 
     height: height * 0.3, // 30% of screen height
 
@@ -147,7 +147,6 @@ const TextAndPicture = (route: any) => {
   const item = route.params.param;
 
   const imgLink = setImageLink(item.uid, item.type);
-  console.log(imgLink)
 
   //code from gpt
 
@@ -160,7 +159,6 @@ const TextAndPicture = (route: any) => {
       const folderRef = ref(FIREBASE_STORAGE, "past/fire_story"); // Assuming item.type is the folder name
 
       const listResult = await listAll(folderRef);
-      console.log(listResult)
 
       const imageArray = await Promise.all(
         listResult.items.map((obj, i) => {

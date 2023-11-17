@@ -32,6 +32,8 @@
     "react-native-reanimated": "^3.5.4",
     "react-native-safe-area-context": "4.6.3",
     "react-native-screens": "~3.22.0",
+    "react-native-snap-carousel": "^4.0.0-beta.6",
+    "react-native-snap-carousel-v4": "^1.0.1",
     "react-native-webview": "^13.6.2",
     "shorthash": "^0.0.2",
     "tailwindcss": "^3.3.2"
@@ -42,6 +44,7 @@
     "@babel/preset-typescript": "^7.23.3",
     "@types/jest": "^29.5.8",
     "@types/react": "~18.2.14",
+    "@types/react-native-snap-carousel": "^3.8.8",
     "@types/react-test-renderer": "^18.0.6",
     "jest": "^29.7.0",
     "jest-expo": "~49.0.0",
@@ -59,7 +62,9 @@
       "^.+\\.(ts|tsx)?$": "ts-jest",
       "^.+\\.(js|jsx)$": "babel-jest"
     },
-    "fakeTimers": { "enableGlobally": true }
+    "fakeTimers": {
+      "enableGlobally": true
+    }
   },
   "private": true
 }

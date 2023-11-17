@@ -33,8 +33,6 @@ export const Past = () => {
     return () => subscriber();
   }, []);
   
-    console.log(datas)
-  
   return (
     <ScrollView>
       <View>
