@@ -4,7 +4,7 @@ import {act, create, ReactTestRendererJSON} from 'react-test-renderer';
 import QRScanner from '../src/QRcode';
 
 describe('<QRScanner />', () => {
-  it('request permissions', async () => {
+  it('request permissions to fail', async () => {
     const comp = new QRScanner({ navigation: null });
     try {
         await comp._requestCameraPermission();
