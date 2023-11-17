@@ -12,8 +12,8 @@ type QRProps = {
 };
 type QRState = {
   hasCameraPermission: Boolean,
-  key: number,
   audioFile: string,
+  all_downloaded: Boolean,
 };
 
 export const SAVE_DIR = FileSys.cacheDirectory + 'kncapp/';
@@ -27,7 +27,7 @@ async function saveDirExists(): Promise<Boolean> {
   return (await FileSys.getInfoAsync(SAVE_DIR)).exists;
 }
 
-async function saveFileExists(file: string): Promise<Boolean> {
+export async function saveFileExists(file: string): Promise<Boolean> {
   return (await FileSys.getInfoAsync(file)).exists;
 }
 
@@ -35,25 +35,22 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
   state: QRState = {
     hasCameraPermission: false,
     audioFile: '',
-    key: 0
+    all_downloaded: false,
   };
 
   async componentDidMount() {
     await this._requestCameraPermission();
-    this.setState({key: -1})
   }
 
-  _requestCameraPermission = async () => {
-    const { status } = await BarCodeScanner.requestPermissionsAsync();
+  async _requestCameraPermission() {
+    const obj = await BarCodeScanner.requestPermissionsAsync();
     this.setState({
-      hasCameraPermission: status === 'granted',
+      hasCameraPermission: obj.status === 'granted',
     });
-  };
+  }
 
-  _handleBarCodeRead = async (result: any) => {
+  async _handleBarCodeRead(result: any) {
     var path: string[] = result.data.split('/');
-    console.log(path);
-
     var data_doc: DocumentSnapshot;
     try {
       data_doc = await getDoc(doc(
@@ -66,7 +63,6 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
       return;
     }
 
-    console.log(data_doc.data());
     if (data_doc.get('audio')) {
       try {
         if (!(await saveDirExists())) {
@@ -80,19 +76,16 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
             await FileSys.downloadAsync(url, SAVE_DIR + file + '.mp3');
           }
         }
-        alert("All audio has downloaded");
-        this.setState((prev, props) => { return {key: prev.key + 1}; });
-        return;
+        this.setState({ all_downloaded: true });
+        this.props.navigation.navigate('Trails');
       } catch (e) {
-        console.log(`We got an error: ${e}`);
+        console.log(`While downloading all files: ${e}`);
       }
     }
 
-    this.setState((prev, props) => { return {key: prev.key + 1}; });
-
     // This happens for both audio and picture pages
     this.props.navigation.navigate('Info_Template', { param: data_doc.data() });
-  };
+  }
 
   render() {
     return (
@@ -109,8 +102,10 @@ export default class QRScanner extends React.Component<QRProps, QRState> {
               height: '75%',
               width: '100%'
             }}>
+            {this.state.all_downloaded
+              ? <Text>All Files downloaded</Text>
+              : null}
             <BarCodeScanner
-              key={this.state.key}
               onBarCodeScanned={this._handleBarCodeRead}
               style={{
                 height: '100%',

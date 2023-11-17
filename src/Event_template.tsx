@@ -289,6 +289,7 @@ const TextAndPicture = (route: any) => {
             renderItem={renderItem}
             sliderWidth={width}
             itemWidth={width * 0.8}
+            vertical={false}
           />
           <Pressable 
             style={button.button} 

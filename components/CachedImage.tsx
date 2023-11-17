@@ -27,14 +27,12 @@ const CachedImage = (props : any) => {
 
         if (cachedImageInfo.exists) {
             setCachedUri(cachedImageInfo.uri);
-            console.log("cached image:",cachedImageInfo.uri)
           } 
         else {
             const reference = ref(FIREBASE_STORAGE, url); 
 
             try {
                 const downloadURL = await getDownloadURL(reference);
-                console.log("download url:", downloadURL);
       
                 // Download the image and save it to the cache
                 const downloadedImage = await FileSystem.downloadAsync(downloadURL, `${FileSystem.cacheDirectory}kncapp` + url);
