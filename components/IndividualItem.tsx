@@ -22,11 +22,7 @@ const setImageLink = (uid: string, type: string) => {
 
 export const IndividualItem = ({ item }: any) => {
   const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
-
   const imgLink = setImageLink(item.uid, item.type);
-
-
-
   return (
     <View>
       <Pressable onPress={() => navigation.navigate('Info_Template', { param: item })}
