@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, ScrollView } from 'react-native';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { Unsubscribe, collection, onSnapshot } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../firebaseConfig';
 import { Event_item } from '../components/Event_item';
 import { loadAsync } from 'expo-font';
@@ -11,6 +11,8 @@ interface CurrentState {
 }
 
 export class Current extends React.Component<{}, CurrentState> {
+  unsubscribe: null | Unsubscribe = null;
+
   constructor(props: {}) {
     super(props);
     this.state = {
@@ -27,7 +29,7 @@ export class Current extends React.Component<{}, CurrentState> {
     this.setState({ fontsLoaded: true });
 
     const querySnapshot = collection(FIRESTORE_DB, "current");
-    const subscriber = onSnapshot(querySnapshot, {
+    this.unsubscribe = onSnapshot(querySnapshot, {
       next: (snapshot) => {
         const datas: any[] = [];
         snapshot.docs.forEach((doc) => {
@@ -39,11 +41,12 @@ export class Current extends React.Component<{}, CurrentState> {
         this.setState({ datas });
       },
     });
+  }
 
-    // Remember to unsubscribe from your firestore snapshot
-    return () => {
-      subscriber();
-    };
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
   }
 
   render() {

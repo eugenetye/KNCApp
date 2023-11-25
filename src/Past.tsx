@@ -1,21 +1,35 @@
-import { View, Text, ScrollView } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { useFonts } from 'expo-font';
+import React, { Component } from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { loadAsync } from 'expo-font';
 import { FIRESTORE_DB } from '../firebaseConfig';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { Unsubscribe, collection, onSnapshot } from 'firebase/firestore';
 import { Event_item } from '../components/Event_item';
 
-export const Past = () => {
-  const [fontsLoaded] = useFonts({
-    'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
-  });
+export class Past extends Component {
+  state = {
+    fontsLoaded: false,
+    datas: [],
+  };
+  unsubscribe: null | Unsubscribe = null;
 
+  async componentDidMount() {
+    await this.loadFonts();
 
-  const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
+    if (this.state.fontsLoaded) {
+      this.loadData();
+    }
+  }
 
+  async loadFonts() {
+    await loadAsync({
+      'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
+    });
 
-  useEffect(() => {
-    const querySnapshot = collection(FIRESTORE_DB, "past");
+    this.setState({ fontsLoaded: true });
+  }
+
+  loadData = () => {
+    const querySnapshot = collection(FIRESTORE_DB, 'past');
 
     const subscriber = onSnapshot(querySnapshot, {
       next: (snapshot) => {
@@ -24,27 +38,40 @@ export const Past = () => {
           datas.push({
             id: doc.id,
             ...doc.data(),
-          })
+          });
         });
-        setDatas(datas);
+        this.setState({ datas });
       },
     });
 
-    return () => subscriber();
-  }, []);
-  
-  return (
-    <ScrollView>
-      <View>
-        <View>
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Past Exhibits</Text>
-        </View>
+    this.unsubscribe = subscriber;
+  };
 
-        {datas.map((data, i) => (
-            <Event_item key={i} item={data}/> 
-          ))}
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
 
-      </View>
-    </ScrollView>
-  )
+  render() {
+    const { fontsLoaded, datas } = this.state;
+
+    if (fontsLoaded) {
+      return (
+        <ScrollView>
+          <View>
+            <View>
+              <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding: 15 }}>Past Exhibits</Text>
+            </View>
+
+            {datas.map((data, i) => (
+              <Event_item key={i} item={data} />
+            ))}
+          </View>
+        </ScrollView>
+      );
+    } else {
+      return null; // or render a loading indicator
+    }
+  }
 }
