@@ -31,7 +31,7 @@ export async function saveFileExists(file: string): Promise<Boolean> {
   return (await FileSys.getInfoAsync(file)).exists;
 }
 
-export default class QRScanner extends React.Component<QRProps, QRState> {
+export class QRScanner extends React.Component<QRProps, QRState> {
   state: QRState = {
     hasCameraPermission: false,
     audioFile: '',

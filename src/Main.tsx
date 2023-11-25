@@ -2,11 +2,11 @@ import { View, Text, ScrollView } from 'react-native'
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Ionicons from "@expo/vector-icons/Ionicons";
 import React from 'react'
-import {Trails} from './Trails'
-import {Discover} from './Discover'
-import {Current} from './Current';
-import {Past} from './Past';
-import {QRcode} from './QRcode';
+import { Trails } from './Trails'
+import { Discover } from './Discover'
+import { Current } from './Current';
+import { Past } from './Past';
+import { QRcode } from './QRcode';
 import { RouteProp } from '@react-navigation/native'; // Import RouteProp
 import { ParamListBase } from '@react-navigation/native'; // Import ParamListBase
 

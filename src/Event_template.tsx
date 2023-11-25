@@ -23,31 +23,22 @@ const styles = StyleSheet.create({
   itemContainer: {
     flex: 1, // this will make the container expand to fill available space
     alignItems: "center",
-
     backgroundColor: "white",
-
     borderRadius: 8,
-
     padding: 20,
-
     justifyContent: "flex-start", // changed from 'center' to 'flex-start' to align children to the top
-
     marginTop: 60, // adjust this value to shift the container down under the back arrow
   },
 
   itemImg: {
     width: width * 0.7, // 80% of screen width
-
     height: height * 0.3, // 30% of screen height
-
     borderRadius: 8, // Added rounding to images
   },
 
   itemTitle: {
     fontSize: 24,
-
     fontWeight: "bold",
-
     marginTop: 10, // Space between the image and title
   },
 
@@ -64,13 +55,11 @@ const styles = StyleSheet.create({
     fontSize: 15,
     lineHeight: 20,
     marginTop: 10, // Space between the title and body
-
     textAlign: "center", // Center the text if it's a short sentence
   },
 
   safeArea: {
     flex: 1,
-
     backgroundColor: "#F8F8F8", // or any other background color you prefer
   },
 
@@ -84,23 +73,14 @@ const styles = StyleSheet.create({
 
   backButton: {
     position: "absolute",
-
     top: 10, // safe distance from the top edge
-
     left: 10,
-
     width: 50,
-
     height: 50,
-
     borderRadius: 25,
-
     alignItems: "center",
-
     justifyContent: "center",
-
     backgroundColor: "white",
-
     zIndex: 1,
   },
 });
