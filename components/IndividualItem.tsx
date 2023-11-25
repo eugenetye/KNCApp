@@ -1,7 +1,5 @@
-import { Text, View, Pressable, Image } from "react-native";
-import React, { useState, useEffect } from "react";
-import { FIREBASE_STORAGE } from "../firebaseConfig";
-import { ref, getDownloadURL } from "firebase/storage";
+import { Text, View, Pressable } from "react-native";
+import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
 import CachedImage from "../components/CachedImage";

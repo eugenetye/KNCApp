@@ -171,8 +171,8 @@ const TextAndPicture = (route: any) => {
             </Text>
           </View>
           <View>
-            <Image className='w-full h-40 object-cover rounded-2xl mt-3 mb-4'
-              source={{ uri: url }}
+            <CachedImage className='w-full h-40 object-cover rounded-2xl mt-3 mb-4'
+              url={ url }
             />
             {showLength()}
             {displayDescription(item.description)}

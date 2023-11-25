@@ -1,5 +1,5 @@
 import { ScrollView, Text, View, Pressable, Image, StyleSheet } from 'react-native'
-import React, { useState, useLayoutEffect, useEffect, Component } from 'react'
+import React, { useState, useEffect } from 'react'
 import { useFonts } from 'expo-font';
 import { useNavigation } from '@react-navigation/native';
 import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';

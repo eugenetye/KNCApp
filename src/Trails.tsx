@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { useFonts } from 'expo-font';
-import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
+import { FIRESTORE_DB } from '../firebaseConfig';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { IndividualItem } from '../components/IndividualItem';
 
@@ -10,9 +10,7 @@ export const Trails = () => {
     'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
   });
 
-
   const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
-
 
   useEffect(() => {
     const querySnapshot = collection(FIRESTORE_DB, "trails");
