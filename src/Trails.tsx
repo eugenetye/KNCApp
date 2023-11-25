@@ -1,52 +1,77 @@
-import { View, Text, ScrollView } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { useFonts } from 'expo-font';
+import React, { Component } from 'react';
+import { View, Text, ScrollView } from 'react-native';
+import { loadAsync } from 'expo-font';
 import { FIRESTORE_DB } from '../firebaseConfig';
-import { collection, onSnapshot } from 'firebase/firestore';
+import { Unsubscribe, collection, onSnapshot } from 'firebase/firestore';
 import { IndividualItem } from '../components/IndividualItem';
 
-export const Trails = () => {
-  const [fontsLoaded] = useFonts({
-    'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
-  });
+export class Trails extends Component {
+  state = {
+    fontsLoaded: false,
+    datas: [],
+  };
+  unsubscribe: null | Unsubscribe = null;
 
-  const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
+  async componentDidMount() {
+    await this.loadFonts();
 
-  useEffect(() => {
-    const querySnapshot = collection(FIRESTORE_DB, "trails");
+    if (this.state.fontsLoaded) {
+      this.loadData();
+    }
+  }
+
+  async loadFonts() {
+    await loadAsync({
+      'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
+    });
+
+    this.setState({ fontsLoaded: true });
+  }
+
+  loadData = () => {
+    const querySnapshot = collection(FIRESTORE_DB, 'trails');
 
     const subscriber = onSnapshot(querySnapshot, {
       next: (snapshot) => {
-        var d: any[] = [];
+        const d: any[] = [];
         snapshot.docs.forEach((doc) => {
           d.push({
             id: doc.id,
             ...doc.data(),
-          })
+          });
         });
-        setDatas(d);
+        this.setState({ datas: d });
       },
     });
 
-    return () => subscriber();
-  }, []);
-  
-    
-  return (
-    <ScrollView>
-      <View>
-        <View>
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Trails</Text>
-        </View>
+    this.unsubscribe = subscriber;
+  };
 
-        {datas.map((data, i) => (
-            <IndividualItem key={i} item={data}/> 
-          ))}
+  componentWillUnmount() {
+    if (this.unsubscribe) {
+      this.unsubscribe();
+    }
+  }
 
-      </View>
-    </ScrollView>
-  )
+  render() {
+    const { fontsLoaded, datas } = this.state;
+
+    if (fontsLoaded) {
+      return (
+        <ScrollView>
+          <View>
+            <View>
+              <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding: 15 }}>Trails</Text>
+            </View>
+
+            {datas.map((data, i) => (
+              <IndividualItem key={i} item={data} />
+            ))}
+          </View>
+        </ScrollView>
+      );
+    } else {
+      return null; // or render a loading indicator
+    }
+  }
 }
-
-
-
