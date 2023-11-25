@@ -1,7 +1,7 @@
 import { View, Text, ScrollView } from 'react-native'
 import React, {useEffect, useState} from 'react'
 import { useFonts } from 'expo-font';
-import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
+import { FIRESTORE_DB } from '../firebaseConfig';
 import { collection, onSnapshot } from 'firebase/firestore';
 import { Event_item } from '../components/Event_item';
 
@@ -37,7 +37,7 @@ export const Past = () => {
     <ScrollView>
       <View>
         <View>
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Past</Text>
+          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Past Exhibits</Text>
         </View>
 
         {datas.map((data, i) => (

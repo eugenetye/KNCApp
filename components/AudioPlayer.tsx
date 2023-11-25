@@ -1,6 +1,6 @@
-import { View, Text, ScrollView, Button, Pressable } from 'react-native'
+import { View, Text, Pressable } from 'react-native'
 import Ionicons from "@expo/vector-icons/Ionicons";
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { ProgressBar } from 'react-native-paper';
 import { AVPlaybackStatus, Audio } from 'expo-av';
 

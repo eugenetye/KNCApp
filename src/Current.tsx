@@ -37,7 +37,7 @@ export const Current = () => {
     <ScrollView>
       <View>
         <View>
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Current</Text>
+          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Current Exhibits</Text>
         </View>
 
         {datas.map((data, i) => (
