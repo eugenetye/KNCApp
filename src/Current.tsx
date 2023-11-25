@@ -1,21 +1,32 @@
-import { View, Text, ScrollView } from 'react-native'
-import React, {useEffect, useState} from 'react'
-import { useFonts } from 'expo-font';
-import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
+import React from 'react';
+import { View, Text, ScrollView } from 'react-native';
 import { collection, onSnapshot } from 'firebase/firestore';
+import { FIRESTORE_DB } from '../firebaseConfig';
 import { Event_item } from '../components/Event_item';
+import { loadAsync } from 'expo-font';
 
+interface CurrentState {
+  datas: any[];
+  fontsLoaded: boolean;
+}
 
-export const Current = () => {
-  const [fontsLoaded] = useFonts({
-    'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
-  });
+export class Current extends React.Component<{}, CurrentState> {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      datas: [],
+      fontsLoaded: false,
+    };
+  }
 
-  const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
+  async componentDidMount() {
+    await loadAsync({
+      'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
+    });
 
-  useEffect(() => {
+    this.setState({ fontsLoaded: true });
+
     const querySnapshot = collection(FIRESTORE_DB, "current");
-
     const subscriber = onSnapshot(querySnapshot, {
       next: (snapshot) => {
         const datas: any[] = [];
@@ -23,28 +34,37 @@ export const Current = () => {
           datas.push({
             id: doc.id,
             ...doc.data(),
-          })
+          });
         });
-        setDatas(datas);
+        this.setState({ datas });
       },
     });
 
-    return () => subscriber();
-  }, []);
+    // Remember to unsubscribe from your firestore snapshot
+    return () => {
+      subscriber();
+    };
+  }
 
+  render() {
+    const { datas, fontsLoaded } = this.state;
 
-  return (
-    <ScrollView>
-      <View>
+    if (!fontsLoaded) {
+      return <View><Text>Loading...</Text></View>;
+    }
+
+    return (
+      <ScrollView>
         <View>
-          <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Current</Text>
-        </View>
+          <View>
+            <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding: 15 }}>Current</Text>
+          </View>
 
-        {datas.map((data, i) => (
-            <Event_item key={i} item={data}/> 
+          {datas.map((data, i) => (
+            <Event_item key={i} item={data}/>
           ))}
-
-      </View>
-    </ScrollView>
-  )
+        </View>
+      </ScrollView>
+    );
+  }
 }

@@ -1,15 +1,15 @@
-import { ScrollView, Text, View, Pressable, Image, StyleSheet } from 'react-native'
-import React, { useState, useLayoutEffect, useEffect, Component } from 'react'
-import { useFonts } from 'expo-font';
-import { useNavigation } from '@react-navigation/native';
-import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
+import React from 'react';
+import { ScrollView, Text, View, Pressable, StyleSheet } from 'react-native';
 import { collection, onSnapshot } from 'firebase/firestore';
+import { FIRESTORE_DB } from '../firebaseConfig';
 import CachedImage from '../components/CachedImage';
 import { StackNavigationProp } from '@react-navigation/stack';
+import { NavigationContext } from '@react-navigation/native';
+import { loadAsync } from 'expo-font';
 
 export type RootStackParamList = {
   Info_Template: { param: any } | undefined;
-}
+};
 
 const styles = StyleSheet.create({
   image: {
@@ -29,66 +29,86 @@ const styles = StyleSheet.create({
   }
 });
 
-export const Discover = () => {
-  const [fontsLoaded] = useFonts({
-    'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
-  });
+interface DiscoverState {
+  datas: any[];
+  fontsLoaded: boolean;
+}
 
-  const [datas, setDatas] = useState<any[]>([]); // Initialize with an empty array
-  const navigation = useNavigation<StackNavigationProp<RootStackParamList>>();
+export class Discover extends React.Component<{}, DiscoverState> {
+  static contextType = NavigationContext;
+  context!: React.ContextType<typeof NavigationContext>;
 
-  useEffect(() => {
+  constructor(props: {}) {
+    super(props);
+    this.state = {
+      datas: [],
+      fontsLoaded: false,
+    };
+  }
+
+  async componentDidMount() {
+    await loadAsync({
+      'Questrial-Regular': require('../assets/fonts/Questrial-Regular.ttf'),
+    });
+
+    this.setState({ fontsLoaded: true });
+
     const querySnapshot = collection(FIRESTORE_DB, "discover");
-
     const subscriber = onSnapshot(querySnapshot, {
       next: (snapshot) => {
-        
         const datas: any[] = [];
         snapshot.docs.forEach((doc) => {
           datas.push({
             id: doc.id,
             ...doc.data(),
-          })
+          });
         });
-        setDatas(datas);
+        this.setState({ datas });
       },
     });
 
-    return () => subscriber();
-  }, []);
+    // Remember to unsubscribe from your firestore snapshot
+    return () => {
+      subscriber();
+    };
+  }
 
-  if (fontsLoaded) {
+  render() {
+    const { datas, fontsLoaded } = this.state;
+    const navigation = this.context as StackNavigationProp<RootStackParamList>;
+
+    if (!fontsLoaded) {
+      return null;
+    }
+
     return (
       <ScrollView>
         <View>
-        <View>
+          <View>
             <Text style={{ fontFamily: 'Questrial-Regular', fontSize: 40, padding:15 }}>Discover</Text>
           </View>
-          <View style={{ 
-            paddingVertical: 12, backgroundColor: "#F8F8F8",
-            borderRadius: 8,
-            padding: 10,
-            flexDirection: "column",
-            alignItems: "flex-start",
-            justifyContent: "space-between",
-            margin: 14, }}>
-
-            <CachedImage className='w-full h-40 object-cover rounded-2xl mt-3 mb-4' url = {'/discover/discover.jpeg'}
-            />
           </View>
-          <View style={{alignItems: 'center'}}>
-            {datas.map((data, i) => (
-                <Pressable style={styles.button} key={i} onPress={() => navigation.navigate('Info_Template', { param: data })}>
-                <Text style={{color: 'white', fontSize: 20, fontFamily: 'Questrial-Regular'}}>{data.title}</Text>
-                </Pressable>
-              ))}       
-          </View>
+            <View style={{ 
+              paddingVertical: 12, backgroundColor: "#F8F8F8",
+              borderRadius: 8,
+              padding: 10,
+              flexDirection: "column",
+              alignItems: "flex-start",
+              justifyContent: "space-between",
+              margin: 14, }}>
 
-        </View>
+              <CachedImage className='w-full h-40 object-cover rounded-2xl mt-3 mb-4' url = {'/discover/discover.jpeg'}
+              />
+            </View>
+            <View style={{alignItems: 'center'}}>
+              {datas.map((data, i) => (
+                  <Pressable style={styles.button} key={i} onPress={() => navigation.navigate('Info_Template', { param: data })}>
+                  <Text style={{color: 'white', fontSize: 20, fontFamily: 'Questrial-Regular'}}>{data.title}</Text>
+                  </Pressable>
+                ))}       
+            </View>
       </ScrollView>
-    )
-  } else {
-    return null;
+    );
   }
-
 }
+
