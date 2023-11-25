@@ -49,6 +49,16 @@ export class QRScanner extends React.Component<QRProps, QRState> {
     });
   }
 
+  _navigateToTrails = () => {
+    this.setState({ all_downloaded: true });
+    this.props.navigation.navigate('Trails');
+  }
+
+  _navigateWithData = (data: any) => {
+    this.props.navigation.navigate('Info_Template', { param: data });
+
+  }
+
   _handleBarCodeRead = async (result: any) => {
     var path: string[] = result.data.split('/');
     var data_doc: DocumentSnapshot;
@@ -76,16 +86,13 @@ export class QRScanner extends React.Component<QRProps, QRState> {
             await FileSys.downloadAsync(url, SAVE_DIR + file + '.mp3');
           }
         }
-        this.setState({ all_downloaded: true });
-        this.props.navigation.navigate('Trails');
+        this._navigateToTrails();
         return;
       } catch (e) {
         console.log(`While downloading all files: ${e}`);
       }
     }
-
-    // This happens for both audio and picture pages
-    this.props.navigation.navigate('Info_Template', { param: data_doc.data() });
+    this._navigateWithData(data_doc.data());
   }
 
   render() {
