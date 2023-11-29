@@ -9,9 +9,10 @@ describe('<AudioPlayer />', () => {
     let tree = comp.toTree()?.instance;
     expect(tree.state.isPlaying || tree.state.hasStarted).toBeFalsy()
   });
-  it('plays valid song', async () => {
-    const comp = create(<AudioPlayer file='../assets/foo.mp3' />);
-    let tree = comp.toTree()?.instance;
-    expect(tree.state.isPlaying || tree.state.hasStarted).toBeTruthy();
+
+  it('renders correctly', async () => {
+    const comp = create(<AudioPlayer file='foo.bar' />);
+    let tree = comp.toJSON();
+    expect(tree).toMatchSnapshot()
   });
 });

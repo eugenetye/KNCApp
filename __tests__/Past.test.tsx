@@ -14,4 +14,10 @@ describe('<Past />', () => {
 
     expect(tree?.state.fontsLoaded).toBeTruthy();
   });
+
+  it('renders correctly', async () => {
+    const comp = create(<Past />);
+    let tree = comp.toJSON();
+    expect(tree).toMatchSnapshot()
+  });
 });
