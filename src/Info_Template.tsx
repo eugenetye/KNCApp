@@ -6,8 +6,8 @@ import { ref, getDownloadURL, listAll } from "firebase/storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { NativeStackNavigationProp } from '@react-navigation/native-stack';
-import AudioPlayer from '../components/AudioPlayer';
-import CachedImage from '../components/CachedImage';
+import { AudioPlayer } from '../components/AudioPlayer';
+import { CachedImage } from '../components/CachedImage';
 import { SAVE_DIR, saveFileExists } from './QRcode';
 
 

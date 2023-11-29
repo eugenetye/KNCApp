@@ -2,7 +2,7 @@ import React from 'react';
 import { ScrollView, Text, View, Pressable, StyleSheet } from 'react-native';
 import { Unsubscribe, collection, onSnapshot } from 'firebase/firestore';
 import { FIRESTORE_DB } from '../firebaseConfig';
-import CachedImage from '../components/CachedImage';
+import { CachedImage } from '../components/CachedImage';
 import { StackNavigationProp } from '@react-navigation/stack';
 import { NavigationContext } from '@react-navigation/native';
 import { loadAsync } from 'expo-font';
@@ -36,7 +36,7 @@ interface DiscoverState {
 
 export class Discover extends React.Component<{}, DiscoverState> {
   static contextType = NavigationContext;
-  context!: React.ContextType<typeof NavigationContext>;
+  // context!: React.ContextType<typeof NavigationContext>;
   unsubscribe: null | Unsubscribe = null;
 
   constructor(props: {}) {

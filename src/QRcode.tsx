@@ -86,7 +86,8 @@ export class QRScanner extends React.Component<QRProps, QRState> {
             await FileSys.downloadAsync(url, SAVE_DIR + file + '.mp3');
           }
         }
-        this._navigateToTrails();
+        this.setState({ all_downloaded: true });
+        // this._navigateToTrails();
         return;
       } catch (e) {
         console.log(`While downloading all files: ${e}`);
@@ -101,7 +102,11 @@ export class QRScanner extends React.Component<QRProps, QRState> {
         {this.state.hasCameraPermission === null ? (
           <Text>Requesting for camera permission</Text>
         ) : this.state.hasCameraPermission === false ? (
-          <Text style={{ color: '#fff' }}>
+          <Text style={{
+            textAlign: 'center',
+            fontSize: 25,
+            color: 'red'
+          }}>
             Camera permission is not granted
           </Text>
         ) : (
@@ -111,13 +116,18 @@ export class QRScanner extends React.Component<QRProps, QRState> {
               width: '100%'
             }}>
             {this.state.all_downloaded
-              ? <Text>All Files downloaded</Text>
+              ? <Text style={{
+                fontSize: 30,
+                textAlign: 'center'
+              }}>All Files downloaded</Text>
               : null}
             <BarCodeScanner
               onBarCodeScanned={this._handleBarCodeRead}
               style={{
                 height: '100%',
                 width: '100%',
+                borderWidth: 50,
+                borderRadius: 30,
               }}
             />
           </View>)}
