@@ -14,7 +14,7 @@ const Tab = createBottomTabNavigator();
 
 function showScreens(
   pageName: string,
-  comp: () => React.JSX.Element | null
+  comp: any
 ) {
   return (
     <Tab.Screen

@@ -13,7 +13,7 @@ import { ref, listAll } from "firebase/storage";
 import Ionicons from "@expo/vector-icons/Ionicons";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { NativeStackNavigationProp } from "@react-navigation/native-stack";
-import CachedImage from "../components/CachedImage";
+import { CachedImage } from "../components/CachedImage";
 import Carousel from "react-native-snap-carousel";
 import { Linking } from "react-native";
 

@@ -1,7 +1,7 @@
 import React, {useEffect, useRef, useState} from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
-import CachedImage from '../components/CachedImage';
+import { CachedImage } from '../components/CachedImage';
 
 export const Trail_Map = () => {
   return (

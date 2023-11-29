@@ -1,7 +1,7 @@
 import React from 'react';
 import {act, create, ReactTestRendererJSON} from 'react-test-renderer';
 
-import QRScanner from '../src/QRcode';
+import { QRScanner } from '../src/QRcode';
 
 describe('<QRScanner />', () => {
   it('request permissions to fail', async () => {

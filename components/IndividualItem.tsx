@@ -2,7 +2,7 @@ import { Text, View, Pressable } from "react-native";
 import React from "react";
 import { useNavigation } from "@react-navigation/native";
 import { StackNavigationProp } from '@react-navigation/stack';
-import CachedImage from "../components/CachedImage";
+import { CachedImage } from "../components/CachedImage";
 
 export type RootStackParamList = {
   Info_Template: { param: any } | undefined;
