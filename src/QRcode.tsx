@@ -56,7 +56,6 @@ export class QRScanner extends React.Component<QRProps, QRState> {
 
   _navigateWithData = (data: any) => {
     this.props.navigation.navigate('Info_Template', { param: data });
-
   }
 
   _handleBarCodeRead = async (result: any) => {
@@ -87,7 +86,6 @@ export class QRScanner extends React.Component<QRProps, QRState> {
           }
         }
         this.setState({ all_downloaded: true });
-        // this._navigateToTrails();
         return;
       } catch (e) {
         console.log(`While downloading all files: ${e}`);
