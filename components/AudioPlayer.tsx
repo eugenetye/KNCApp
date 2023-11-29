@@ -80,7 +80,6 @@ export class AudioPlayer extends React.Component<AudioProps, AudioState> {
       await playbackObject.loadAsync({ uri: this.props.file }, { shouldPlay: false });
     } catch (e) {
       console.log(`LOAD: ${e}`);
-      throw e;
       return;
     }
     this.setState({
