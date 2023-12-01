@@ -1,0 +1,47 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Discover /> renders correctly 1`] = `
+<ScrollView>
+  <View>
+    <View>
+      <Text
+        style={
+          {
+            "fontFamily": "Questrial-Regular",
+            "fontSize": 40,
+            "padding": 15,
+          }
+        }
+      >
+        Discover
+      </Text>
+    </View>
+  </View>
+  <View
+    style={
+      {
+        "alignItems": "flex-start",
+        "backgroundColor": "#F8F8F8",
+        "borderRadius": 8,
+        "flexDirection": "column",
+        "justifyContent": "space-between",
+        "margin": 14,
+        "padding": 10,
+        "paddingVertical": 12,
+      }
+    }
+  >
+    <CachedImage
+      className="w-full h-40 object-cover rounded-2xl mt-3 mb-4"
+      url="/discover/discover.jpeg"
+    />
+  </View>
+  <View
+    style={
+      {
+        "alignItems": "center",
+      }
+    }
+  />
+</ScrollView>
+`;

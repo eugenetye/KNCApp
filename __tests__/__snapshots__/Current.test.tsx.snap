@@ -1,0 +1,20 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<Current /> renders correctly 1`] = `
+<ScrollView>
+  <View>
+    <Text
+      style={
+        {
+          "fontFamily": "Questrial-Regular",
+          "fontSize": 40,
+          "padding": 15,
+        }
+      }
+    >
+      Current Exhibits
+    </Text>
+  </View>
+  <View />
+</ScrollView>
+`;

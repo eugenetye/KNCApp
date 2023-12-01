@@ -123,7 +123,7 @@ export type RootStackParamList = {
   Event_item: { param?: any } | undefined;
 };
 
-const TextAndPicture = (route: any) => {
+export const Event_template = (route: any) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const item = route.params.param;
@@ -139,7 +139,6 @@ const TextAndPicture = (route: any) => {
       const imageArray = await Promise.all(
         listResult.items.map((obj, i) => {
           return {
-            //title: imageRef.name,
             body: item.bio[i], // Existing description
             imgUrl: obj.fullPath,
             header1: item.header1[i], // Assuming these are arrays and have the same length as bio
@@ -153,18 +152,6 @@ const TextAndPicture = (route: any) => {
 
     fetchImages();
   }, []);
-
-  const { width: screenWidth } = Dimensions.get("window");
-  const sliderWidth = screenWidth;
-  const itemWidth = screenWidth * 0.8;
-
-  interface YourItemType {
-    imgUrl: string;
-    title: string;
-    body: string;
-    header1: string;
-    header2: string;
-  }
 
   const renderItem = ({ item }: { item: any }) => (
     <View style={styles.itemContainer}>
@@ -226,13 +213,3 @@ const TextAndPicture = (route: any) => {
     </SafeAreaView>
   );
 };
-
-const Event_template = ({ route }: any) => {
-  const item = route.params.param;
-
-  return (
-    <TextAndPicture {...route} />
-  );
-};
-
-export default Event_template;

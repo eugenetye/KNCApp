@@ -1,0 +1,17 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`<QRScanner /> renders correctly 1`] = `
+<View>
+  <Text
+    style={
+      {
+        "color": "red",
+        "fontSize": 25,
+        "textAlign": "center",
+      }
+    }
+  >
+    Camera permission is not granted
+  </Text>
+</View>
+`;

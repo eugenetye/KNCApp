@@ -29,23 +29,14 @@ const styles = StyleSheet.create({
   }
 });
 
-interface DiscoverState {
-  datas: any[];
-  fontsLoaded: boolean;
-}
-
-export class Discover extends React.Component<{}, DiscoverState> {
+export class Discover extends React.Component {
+  state = {
+    fontsLoaded: false,
+    datas: [],
+  };
   static contextType = NavigationContext;
   // context!: React.ContextType<typeof NavigationContext>;
   unsubscribe: null | Unsubscribe = null;
-
-  constructor(props: {}) {
-    super(props);
-    this.state = {
-      datas: [],
-      fontsLoaded: false,
-    };
-  }
 
   async componentDidMount() {
     await loadAsync({
@@ -78,7 +69,7 @@ export class Discover extends React.Component<{}, DiscoverState> {
   }
 
   render() {
-    const { datas, fontsLoaded } = this.state;
+    const { fontsLoaded, datas } = this.state;
     const navigation = this.context as StackNavigationProp<RootStackParamList>;
 
     if (!fontsLoaded) {
@@ -106,7 +97,7 @@ export class Discover extends React.Component<{}, DiscoverState> {
           />
         </View>
         <View style={{ alignItems: 'center' }}>
-          {datas.map((data, i) => (
+          {datas.map((data: { title: string, }, i) => (
             <Pressable style={styles.button} key={i} onPress={() => navigation.navigate('Info_Template', { param: data })}>
               <Text style={{ color: 'white', fontSize: 20, fontFamily: 'Questrial-Regular' }}>{data.title}</Text>
             </Pressable>

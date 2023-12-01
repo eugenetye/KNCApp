@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`<Past /> renders correctly 1`] = `
+exports[`<Trails /> renders correctly 1`] = `
 <ScrollView>
   <View>
     <View>
@@ -13,7 +13,7 @@ exports[`<Past /> renders correctly 1`] = `
           }
         }
       >
-        Past Exhibits
+        Trails
       </Text>
     </View>
   </View>

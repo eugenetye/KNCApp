@@ -58,7 +58,7 @@ export type RootStackParamList = {
   Trail_Map: { param?: any } | undefined;
 };
 
-const TextAndPicture = (route: any) => {
+export const Info_Template = (route: any) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const item = route.params.param;
@@ -185,12 +185,3 @@ const TextAndPicture = (route: any) => {
     </SafeAreaView>
   )
 }
-
-const Info_Template = ({ route }: any) => {
-  const item = route.params.param;
-
-  return (<TextAndPicture {...route} />)
-}
-
-
-export default Info_Template
