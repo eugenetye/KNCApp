@@ -1,22 +1,19 @@
 import React from 'react';
 import { act, create, ReactTestRendererJSON } from 'react-test-renderer';
 
-import { Past } from '../src/Past';
+import { Current } from '../src/Current';
 
-describe('<Past />', () => {
-  // Test Case ID = 13
-  it('load fonts', async () => {
-    const comp = create(<Past />);
+describe('<Current />', () => {
+  // Test Case ID = 7
+  it('loads data', async () => {
+    const comp = create(<Current />);
     let tree = comp.toTree()?.instance;
-    await act(async () => {
-      await tree?.loadFonts();
-    });
-    expect(tree?.state.fontsLoaded).toBeTruthy();
+    expect(tree?.state.datas.length).toEqual(0);
   });
 
-  // Test Case ID 14
+  // Test Case ID = 8
   it('renders correctly', async () => {
-    const comp = new Past({});
+    const comp = new Current({});
     comp.state.fontsLoaded = true;
     const tree = comp.render();
     expect({ ...tree, children: null } as ReactTestRendererJSON)

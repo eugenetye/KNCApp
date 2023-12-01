@@ -5,12 +5,11 @@ import { FIRESTORE_DB } from '../firebaseConfig';
 import { Event_item } from '../components/Event_item';
 import { loadAsync } from 'expo-font';
 
-interface CurrentState {
-  datas: any[];
-  fontsLoaded: boolean;
-}
-
-export class Current extends React.Component<{}, CurrentState> {
+export class Current extends React.Component {
+  state = {
+    fontsLoaded: false,
+    datas: [],
+  };
   unsubscribe: null | Unsubscribe = null;
 
   constructor(props: {}) {

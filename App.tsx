@@ -4,9 +4,9 @@ import {Main} from './src/Main';
 import React from 'react';
 import { Image } from 'react-native';
 
-import Info_Template from './src/Info_Template';
+import { Info_Template } from './src/Info_Template';
 import {Trail_Map} from './src/Trail_Map';
-import Event_template from './src/Event_template';
+import { Event_template } from './src/Event_template';
 
 const Stack = createNativeStackNavigator();
 

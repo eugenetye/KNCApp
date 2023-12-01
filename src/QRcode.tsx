@@ -8,7 +8,8 @@ import { DocumentSnapshot, doc, getDoc } from 'firebase/firestore';
 import { useIsFocused } from '@react-navigation/native';
 
 type QRProps = {
-  navigation: any
+  navigation: any,
+  need_permission?: boolean,
 };
 type QRState = {
   hasCameraPermission: Boolean,
@@ -38,8 +39,17 @@ export class QRScanner extends React.Component<QRProps, QRState> {
     all_downloaded: false,
   };
 
+  constructor(props: QRProps) {
+    if (props.need_permission === undefined) {
+      props.need_permission = true;
+    }
+    super(props);
+  }
+
   async componentDidMount() {
-    await this._requestCameraPermission();
+    if (this.props.need_permission) {
+      await this._requestCameraPermission();
+    }
   }
 
   _requestCameraPermission = async () => {
