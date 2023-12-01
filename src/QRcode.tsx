@@ -118,18 +118,26 @@ export class QRScanner extends React.Component<QRProps, QRState> {
             {this.state.all_downloaded
               ? <Text style={{
                 fontSize: 30,
-                textAlign: 'center'
-              }}>All Files downloaded</Text>
+                textAlign: 'center',
+                padding: 20,
+                fontFamily: 'Questrial-Regular',
+              }}>All Files Downloaded!</Text>
               : null}
             <BarCodeScanner
               onBarCodeScanned={this._handleBarCodeRead}
               style={{
                 height: '100%',
                 width: '100%',
-                borderWidth: 50,
-                borderRadius: 30,
+                borderWidth: 10,
+                borderRadius: 10,
               }}
             />
+            <Text style={{
+                marginTop: 100,
+                fontSize: 30,
+                textAlign: 'center',
+                fontFamily: 'Questrial-Regular',
+              }}>Scan your QR code here!</Text>
           </View>)}
       </View>
     );
