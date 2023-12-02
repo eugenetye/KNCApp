@@ -123,7 +123,7 @@ export type RootStackParamList = {
   Event_item: { param?: any } | undefined;
 };
 
-export const Event_template = (route: any) => {
+export const Event_template = ({route}: any) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
 
   const item = route.params.param;

@@ -58,9 +58,9 @@ export type RootStackParamList = {
   Trail_Map: { param?: any } | undefined;
 };
 
-export const Info_Template = (route: any) => {
+export const Info_Template = ({ route }: any) => {
   const navigation = useNavigation<NativeStackNavigationProp<RootStackParamList>>();
-
+  
   const item = route.params.param;
 
   const imgLink = setImageLink(item.uid, item.type);
