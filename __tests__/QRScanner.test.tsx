@@ -28,7 +28,7 @@ describe('<QRScanner />', () => {
   it('renders correctly', async () => {
     const comp = create(<QRScanner
       navigation={null}
-      need_permission={false}
+      test_permission={true}
     />);
     let tree = comp.toJSON();
     expect(tree).toMatchSnapshot()

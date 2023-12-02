@@ -5,11 +5,10 @@ import * as FileSys from 'expo-file-system';
 import { FIRESTORE_DB, FIREBASE_STORAGE } from '../firebaseConfig';
 import { ref, getDownloadURL } from "firebase/storage";
 import { DocumentSnapshot, doc, getDoc } from 'firebase/firestore';
-import { useIsFocused } from '@react-navigation/native';
 
 type QRProps = {
   navigation: any,
-  need_permission?: boolean,
+  test_permission?: boolean,
 };
 type QRState = {
   hasCameraPermission: Boolean,
@@ -38,16 +37,17 @@ export class QRScanner extends React.Component<QRProps, QRState> {
     audioFile: '',
     all_downloaded: false,
   };
+  needs_permission = true;
 
   constructor(props: QRProps) {
-    if (props.need_permission === undefined) {
-      props.need_permission = true;
-    }
     super(props);
+    if (props.test_permission === true) {
+      this.needs_permission = false;
+    }
   }
 
   async componentDidMount() {
-    if (this.props.need_permission) {
+    if (this.needs_permission) {
       await this._requestCameraPermission();
     }
   }
